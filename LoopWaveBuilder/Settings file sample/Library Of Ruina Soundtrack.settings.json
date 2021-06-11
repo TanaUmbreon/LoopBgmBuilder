@@ -1,4 +1,11 @@
 {
+  "OutputFormat": {
+    "BeginingSilenceMiliseconds": 300,
+    "LoopCount": 2,
+    "FadeoutDelayMiliseconds": 2000,
+    "FadeoutMiliseconds": 10000,
+    "EndingSilenceMiliseconds": 1000
+  },
   "SoundBodyExtractions": [
     {
       "FileName": "1_1_Theme.wav",
@@ -26,12 +33,5 @@
       "TrimsBeginingSilence": false,
       "TrimsEndingSilence": false
     }
-  ],
-  "OutputFormat": {
-    "BeginingSilenceMiliseconds": 300,
-    "LoopCount": 2,
-    "FadeoutDelayMiliseconds": 2000,
-    "FadeoutMiliseconds": 10000,
-    "EndingSilenceMiliseconds": 1000
-  }
+  ]
 }
