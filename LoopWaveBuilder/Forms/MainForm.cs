@@ -8,16 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LoopWaveBuilder.FormModels;
 
 namespace LoopWaveBuilder.Forms
 {
     public partial class MainForm : Form
     {
+        private readonly MainFormModel model;
+
         public MainForm()
         {
             InitializeComponent();
-
             Text = AssemblyInfo.Title;
+
+            model = new MainFormModel();
+            model.OpenSettingsFileCompleted += Model_OpenSettingsFileCompleted;
+            model.OpenSettingsFileFailed += Model_OpenSettingsFileFailed;
         }
 
         #region 設定ファイルの選択
@@ -26,7 +32,8 @@ namespace LoopWaveBuilder.Forms
         {
             var result = SettingsFileOpenFileDialog.ShowDialog(this);
             if (result != DialogResult.OK) { return; }
-            SettingsFilePathTextBox.Text = SettingsFileOpenFileDialog.FileName;
+
+            model.OpenSettingsFile(SettingsFileOpenFileDialog.FileName);
         }
 
         private void SettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
@@ -51,12 +58,25 @@ namespace LoopWaveBuilder.Forms
             try
             {
                 if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
-                SettingsFilePathTextBox.Text = droppedItemPath;
+
+                model.OpenSettingsFile(droppedItemPath);
             }
             catch (Exception ex)
             {
                 ShowErrorDialog(Text, "設定ファイルをドラッグ アンド ドロップできません", ex);
             }
+        }
+
+        private void Model_OpenSettingsFileCompleted(object? sender, EventArgs e)
+        {
+            OpenedSettingsFilePathTextBox.Text = model.OpenedSettingsFilePath;
+            MessageLabel.Text = "設定ファイルを読み込みました";
+        }
+
+        private void Model_OpenSettingsFileFailed(object? sender, EventArgs e)
+        {
+            OpenedSettingsFilePathTextBox.Text = model.OpenedSettingsFilePath;
+            MessageLabel.Text = "設定ファイルを読み込めませんでした";
         }
 
         #endregion
@@ -87,7 +107,7 @@ namespace LoopWaveBuilder.Forms
         /// <param name="data"></param>
         /// <param name="path"></param>
         /// <returns>単独のファイルまたはフォルダーをドロップしてパスを取得できた場合は true、そうでない場合は false。</returns>
-        private bool TryGetPathIfSingleItemDropped(IDataObject data, out string? path)
+        private static bool TryGetPathIfSingleItemDropped(IDataObject data, out string? path)
         {
             path = null;
             if (!data.GetDataPresent(DataFormats.FileDrop)) { return false; }
