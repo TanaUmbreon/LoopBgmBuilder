@@ -1,10 +1,14 @@
 ﻿using System;
 using System.IO;
+using LoopWaveBuilder.Infrastracures;
+using LoopWaveBuilder.Models.Settings;
 
 namespace LoopWaveBuilder.FormModels
 {
     public class MainFormModel
     {
+        private Settings? settings;
+
         public string OpenedSettingsFilePath { get; private set; }
 
         /// <summary>
@@ -61,16 +65,19 @@ namespace LoopWaveBuilder.FormModels
         {
             try
             {
-                OpenedSettingsFilePath = "";
-
                 var file = new FileInfo(fileName);
                 if (!file.Exists) { throw new FileNotFoundException(); }
 
+                var repository = new JsonSettingsRepository(file.FullName);
+ 
+                settings = repository.Settings;
                 OpenedSettingsFilePath = file.FullName;
                 OnOpenSettingsFileCompleted();
             }
             catch (Exception)
             {
+                settings = null;
+                OpenedSettingsFilePath = "";
                 OnOpenSettingsFileFailed();
             }
         }
