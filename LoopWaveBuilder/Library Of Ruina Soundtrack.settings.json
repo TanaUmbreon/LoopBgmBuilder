@@ -1,0 +1,37 @@
+{
+  "SoundBodyExtractions": [
+    {
+      "FileName": "1_1_Theme.wav",
+      "ExtractionScriptName": "PartialLoop",
+      "LoopBeginSamples": 1628132,
+      "LoopEndSamples": 5373415,
+      "TrimsBeginingSilence": true,
+      "TrimsEndingSilence": false
+    },
+    {
+      "FileName": "2_1_Lobby.wav",
+      "ExtractionScriptName": "FullLoop",
+      "TrimsBeginingSilence": true,
+      "TrimsEndingSilence": true
+    },
+    {
+      "FileName": "2_2_Entrance.wav",
+      "ExtractionScriptName": "FullLoop",
+      "TrimsBeginingSilence": false,
+      "TrimsEndingSilence": false
+    },
+    {
+      "FileName": "3_01_MalkuthBattle01.wav",
+      "ExtractionScriptName": "FullLoop",
+      "TrimsBeginingSilence": false,
+      "TrimsEndingSilence": false
+    }
+  ],
+  "OutputFormat": {
+    "BeginingSilenceMiliseconds": 300,
+    "LoopCount": 2,
+    "FadeoutDelayMiliseconds": 2000,
+    "FadeoutMiliseconds": 10000,
+    "EndingSilenceMiliseconds": 1000
+  }
+}
