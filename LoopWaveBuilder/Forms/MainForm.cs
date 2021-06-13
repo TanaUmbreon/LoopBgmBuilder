@@ -22,21 +22,21 @@ namespace LoopWaveBuilder.Forms
             Text = AssemblyInfo.Title;
 
             model = new MainFormModel();
-            model.OpenSettingsFileCompleted += Model_OpenSettingsFileCompleted;
-            model.OpenSettingsFileFailed += Model_OpenSettingsFileFailed;
+            model.LoadSettingsFileCompleted += Model_OpenSettingsFileCompleted;
+            model.LoadSettingsFileFailed += Model_OpenSettingsFileFailed;
         }
 
         #region 設定ファイルの選択
 
-        private void BrowseSettingsFileButton_Click(object sender, EventArgs e)
+        private void SelectSettingsFileButton_Click(object sender, EventArgs e)
         {
-            var result = SettingsFileOpenFileDialog.ShowDialog(this);
+            var result = SettingsOpenFileDialog.ShowDialog(this);
             if (result != DialogResult.OK) { return; }
 
-            model.OpenSettingsFile(SettingsFileOpenFileDialog.FileName);
+            model.LoadSettingsFile(SettingsOpenFileDialog.FileName);
         }
 
-        private void SettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
+        private void LoadedSettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
         {
             try
             {
@@ -53,13 +53,14 @@ namespace LoopWaveBuilder.Forms
             }
         }
 
-        private void SettingsFilePathTextBox_DragDrop(object sender, DragEventArgs e)
+        private void LoadedSettingsFilePathTextBox_DragDrop(object sender, DragEventArgs e)
         {
             try
             {
-                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
+                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
+                if (droppedItemPath == null) { return; }
 
-                model.OpenSettingsFile(droppedItemPath);
+                model.LoadSettingsFile(droppedItemPath);
             }
             catch (Exception ex)
             {
@@ -69,13 +70,13 @@ namespace LoopWaveBuilder.Forms
 
         private void Model_OpenSettingsFileCompleted(object? sender, EventArgs e)
         {
-            OpenedSettingsFilePathTextBox.Text = model.OpenedSettingsFilePath;
+            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
             MessageLabel.Text = "設定ファイルを読み込みました";
         }
 
         private void Model_OpenSettingsFileFailed(object? sender, EventArgs e)
         {
-            OpenedSettingsFilePathTextBox.Text = model.OpenedSettingsFilePath;
+            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
             MessageLabel.Text = "設定ファイルを読み込めませんでした";
         }
 

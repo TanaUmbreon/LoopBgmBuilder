@@ -30,11 +30,11 @@ namespace LoopWaveBuilder.Forms
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.OpenedSettingsFilePathTextBox = new System.Windows.Forms.TextBox();
+            this.LoadedSettingsFilePathTextBox = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.MessageLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenSettingsFileButton = new System.Windows.Forms.Button();
-            this.SettingsFileOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.SettingsOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,18 +47,18 @@ namespace LoopWaveBuilder.Forms
             this.label1.TabIndex = 0;
             this.label1.Text = "Step 1: 設定ファイルを読み込む";
             // 
-            // OpenedSettingsFilePathTextBox
+            // LoadedSettingsFilePathTextBox
             // 
-            this.OpenedSettingsFilePathTextBox.AllowDrop = true;
-            this.OpenedSettingsFilePathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.LoadedSettingsFilePathTextBox.AllowDrop = true;
+            this.LoadedSettingsFilePathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.OpenedSettingsFilePathTextBox.Location = new System.Drawing.Point(12, 27);
-            this.OpenedSettingsFilePathTextBox.Name = "OpenedSettingsFilePathTextBox";
-            this.OpenedSettingsFilePathTextBox.ReadOnly = true;
-            this.OpenedSettingsFilePathTextBox.Size = new System.Drawing.Size(487, 23);
-            this.OpenedSettingsFilePathTextBox.TabIndex = 1;
-            this.OpenedSettingsFilePathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SettingsFilePathTextBox_DragDrop);
-            this.OpenedSettingsFilePathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.SettingsFilePathTextBox_DragEnter);
+            this.LoadedSettingsFilePathTextBox.Location = new System.Drawing.Point(12, 27);
+            this.LoadedSettingsFilePathTextBox.Name = "LoadedSettingsFilePathTextBox";
+            this.LoadedSettingsFilePathTextBox.ReadOnly = true;
+            this.LoadedSettingsFilePathTextBox.Size = new System.Drawing.Size(487, 23);
+            this.LoadedSettingsFilePathTextBox.TabIndex = 1;
+            this.LoadedSettingsFilePathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.LoadedSettingsFilePathTextBox_DragDrop);
+            this.LoadedSettingsFilePathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.LoadedSettingsFilePathTextBox_DragEnter);
             // 
             // statusStrip1
             // 
@@ -84,12 +84,12 @@ namespace LoopWaveBuilder.Forms
             this.OpenSettingsFileButton.TabIndex = 3;
             this.OpenSettingsFileButton.Text = "開く...";
             this.OpenSettingsFileButton.UseVisualStyleBackColor = true;
-            this.OpenSettingsFileButton.Click += new System.EventHandler(this.BrowseSettingsFileButton_Click);
+            this.OpenSettingsFileButton.Click += new System.EventHandler(this.SelectSettingsFileButton_Click);
             // 
-            // SettingsFileOpenFileDialog
+            // SettingsOpenFileDialog
             // 
-            this.SettingsFileOpenFileDialog.DefaultExt = "json";
-            this.SettingsFileOpenFileDialog.Filter = "設定ファイル|*.settings.json|すべてのファイル|*.*";
+            this.SettingsOpenFileDialog.DefaultExt = "json";
+            this.SettingsOpenFileDialog.Filter = "設定ファイル|*.settings.json|すべてのファイル|*.*";
             // 
             // MainForm
             // 
@@ -98,7 +98,7 @@ namespace LoopWaveBuilder.Forms
             this.ClientSize = new System.Drawing.Size(597, 362);
             this.Controls.Add(this.OpenSettingsFileButton);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.OpenedSettingsFilePathTextBox);
+            this.Controls.Add(this.LoadedSettingsFilePathTextBox);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -114,11 +114,11 @@ namespace LoopWaveBuilder.Forms
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox OpenedSettingsFilePathTextBox;
+        private System.Windows.Forms.TextBox LoadedSettingsFilePathTextBox;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel MessageLabel;
         private System.Windows.Forms.Button OpenSettingsFileButton;
-        private System.Windows.Forms.OpenFileDialog SettingsFileOpenFileDialog;
+        private System.Windows.Forms.OpenFileDialog SettingsOpenFileDialog;
     }
 }
 

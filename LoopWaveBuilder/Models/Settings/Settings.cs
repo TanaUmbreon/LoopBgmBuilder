@@ -3,7 +3,7 @@
 namespace LoopWaveBuilder.Models.Settings
 {
     /// <summary>
-    /// アプリケーション設定を格納します。
+    /// WAV ファイルのループ加工設定を格納します。
     /// </summary>
     public record Settings(
         OutputFormatSettings OutputFormat,

@@ -7,50 +7,55 @@ namespace LoopWaveBuilder.FormModels
 {
     public class MainFormModel
     {
+        /// <summary>読み込んだループ加工設定</summary>
         private Settings? settings;
 
-        public string OpenedSettingsFilePath { get; private set; }
+        /// <summary>
+        /// 読み込んだループ加工設定ファイルのパスを取得します。
+        /// </summary>
+        public string LoadedSettingsFilePath { get; private set; }
 
         /// <summary>
         /// <see cref="MainFormModel"/> の新しいインスタンスを生成します。
         /// </summary>
         public MainFormModel()
         {
-            OpenedSettingsFilePath = "";
+            settings = null;
+            LoadedSettingsFilePath = "";
         }
 
         #region イベント
 
-        #region OpenSettingsFileCompleted イベント
+        #region LoadSettingsFileCompleted イベント
 
         /// <summary>
-        /// 設定ファイルが開けた時に呼び出されます。
+        /// ループ加工設定ファイルの読み込みが完了した時に呼び出されます。
         /// </summary>
-        public event EventHandler? OpenSettingsFileCompleted;
+        public event EventHandler? LoadSettingsFileCompleted;
 
         /// <summary>
-        /// <see cref="OpenSettingsFileCompleted"/> イベントを呼び出します。
+        /// <see cref="LoadSettingsFileCompleted"/> イベントを呼び出します。
         /// </summary>
-        protected virtual void OnOpenSettingsFileCompleted()
+        protected virtual void OnLoadSettingsFileCompleted()
         {
-            OpenSettingsFileCompleted?.Invoke(this, EventArgs.Empty);
+            LoadSettingsFileCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
 
-        #region OpenSettingsFileFailed イベント
+        #region LoadSettingsFileFailed イベント
 
         /// <summary>
-        /// 設定ファイルが開けなかった時に呼び出されます。
+        /// ループ加工設定ファイルの読み込みに失敗した時に呼び出されます。
         /// </summary>
-        public event EventHandler? OpenSettingsFileFailed;
+        public event EventHandler? LoadSettingsFileFailed;
 
         /// <summary>
-        /// <see cref="OpenSettingsFileFailed"/> イベントを呼び出します。
+        /// <see cref="LoadSettingsFileFailed"/> イベントを呼び出します。
         /// </summary>
-        protected virtual void OnOpenSettingsFileFailed()
+        protected virtual void OnLoadSettingsFileFailed()
         {
-            OpenSettingsFileFailed?.Invoke(this, EventArgs.Empty);
+            LoadSettingsFileFailed?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
@@ -58,10 +63,10 @@ namespace LoopWaveBuilder.FormModels
         #endregion
 
         /// <summary>
-        /// 指定した設定ファイルを開きます。
+        /// 指定したループ加工設定ファイルを読み込みます。
         /// </summary>
-        /// <param name="fileName"></param>
-        public void OpenSettingsFile(string fileName)
+        /// <param name="fileName">読み込むループ加工設定ファイルの名前。</param>
+        public void LoadSettingsFile(string fileName)
         {
             try
             {
@@ -69,16 +74,16 @@ namespace LoopWaveBuilder.FormModels
                 if (!file.Exists) { throw new FileNotFoundException(); }
 
                 var repository = new JsonSettingsRepository(file.FullName);
- 
+
                 settings = repository.Settings;
-                OpenedSettingsFilePath = file.FullName;
-                OnOpenSettingsFileCompleted();
+                LoadedSettingsFilePath = file.FullName;
+                OnLoadSettingsFileCompleted();
             }
             catch (Exception)
             {
                 settings = null;
-                OpenedSettingsFilePath = "";
-                OnOpenSettingsFileFailed();
+                LoadedSettingsFilePath = "";
+                OnLoadSettingsFileFailed();
             }
         }
     }
