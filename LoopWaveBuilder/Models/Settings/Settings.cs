@@ -7,5 +7,18 @@ namespace LoopWaveBuilder.Models.Settings
     /// </summary>
     public record Settings(
         OutputFormatSettings OutputFormat,
-        IEnumerable<SoundBodyExtractionSettings> SoundBodyExtractions);
+        IEnumerable<SoundBodyExtractionSettings> SoundBodyExtractions)
+    {
+        /// <summary>
+        /// インスタンスの状態を検証し、検証に失敗した場合は例外をスローします。
+        /// </summary>
+        public void ThrowIfValidationFailed()
+        {
+            OutputFormat.ThrowIfValidationFailed();
+            foreach(var extraction in SoundBodyExtractions)
+            {
+                extraction.ThrowIfValidationFailed();
+            }
+        }
+    }
 }

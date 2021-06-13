@@ -74,10 +74,11 @@ namespace LoopWaveBuilder.Forms
             MessageLabel.Text = "設定ファイルを読み込みました";
         }
 
-        private void Model_OpenSettingsFileFailed(object? sender, EventArgs e)
+        private void Model_OpenSettingsFileFailed(object? sender, ErrorEventArgs e)
         {
             LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
             MessageLabel.Text = "設定ファイルを読み込めませんでした";
+            ShowErrorDialog(Text, "設定ファイルを読み込めませんでした", e.GetException());
         }
 
         #endregion

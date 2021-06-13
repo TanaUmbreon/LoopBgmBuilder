@@ -48,14 +48,15 @@ namespace LoopWaveBuilder.FormModels
         /// <summary>
         /// ループ加工設定ファイルの読み込みに失敗した時に呼び出されます。
         /// </summary>
-        public event EventHandler? LoadSettingsFileFailed;
+        public event EventHandler<ErrorEventArgs>? LoadSettingsFileFailed;
 
         /// <summary>
         /// <see cref="LoadSettingsFileFailed"/> イベントを呼び出します。
         /// </summary>
-        protected virtual void OnLoadSettingsFileFailed()
+        /// <param name="ex">失敗の原因となった例外。</param>
+        protected virtual void OnLoadSettingsFileFailed(Exception ex)
         {
-            LoadSettingsFileFailed?.Invoke(this, EventArgs.Empty);
+            LoadSettingsFileFailed?.Invoke(this, new ErrorEventArgs(ex));
         }
 
         #endregion
@@ -74,16 +75,17 @@ namespace LoopWaveBuilder.FormModels
                 if (!file.Exists) { throw new FileNotFoundException(); }
 
                 var repository = new JsonSettingsRepository(file.FullName);
+                repository.Settings.ThrowIfValidationFailed();
 
                 settings = repository.Settings;
                 LoadedSettingsFilePath = file.FullName;
                 OnLoadSettingsFileCompleted();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 settings = null;
                 LoadedSettingsFilePath = "";
-                OnLoadSettingsFileFailed();
+                OnLoadSettingsFileFailed(ex);
             }
         }
     }
