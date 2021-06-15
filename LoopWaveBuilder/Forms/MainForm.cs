@@ -22,66 +22,7 @@ namespace LoopWaveBuilder.Forms
             Text = AssemblyInfo.Title;
 
             model = new MainFormModel();
-            model.LoadSettingsFileCompleted += Model_OpenSettingsFileCompleted;
-            model.LoadSettingsFileFailed += Model_OpenSettingsFileFailed;
         }
-
-        #region 設定ファイルの選択
-
-        private void SelectSettingsFileButton_Click(object sender, EventArgs e)
-        {
-            var result = SettingsOpenFileDialog.ShowDialog(this);
-            if (result != DialogResult.OK) { return; }
-
-            model.LoadSettingsFile(SettingsOpenFileDialog.FileName);
-        }
-
-        private void LoadedSettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
-        {
-            try
-            {
-                // 単独ファイル選択のドラッグアンドドロップのみ受け付け、複数選択やフォルダー選択は受け付けない
-                e.Effect = DragDropEffects.None;
-                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
-                if (!File.Exists(droppedItemPath)) { return; }
-
-                e.Effect = DragDropEffects.All;
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "設定ファイルをドラッグ アンド ドロップできません", ex);
-            }
-        }
-
-        private void LoadedSettingsFilePathTextBox_DragDrop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
-                if (droppedItemPath == null) { return; }
-
-                model.LoadSettingsFile(droppedItemPath);
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "設定ファイルをドラッグ アンド ドロップできません", ex);
-            }
-        }
-
-        private void Model_OpenSettingsFileCompleted(object? sender, EventArgs e)
-        {
-            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
-            MessageLabel.Text = "設定ファイルを読み込みました";
-        }
-
-        private void Model_OpenSettingsFileFailed(object? sender, ErrorEventArgs e)
-        {
-            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
-            MessageLabel.Text = "設定ファイルを読み込めませんでした";
-            ShowErrorDialog(Text, "設定ファイルを読み込めませんでした", e.GetException());
-        }
-
-        #endregion
 
         #region 汎用
 
@@ -118,6 +59,183 @@ namespace LoopWaveBuilder.Forms
 
             path = droppedItems[0];
             return true;
+        }
+
+        #endregion
+
+        #region 設定ファイルの選択
+
+        private void OpenSettingsFileButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = SettingsOpenFileDialog.ShowDialog(this);
+                if (result != DialogResult.OK) { return; }
+
+                model.LoadSettingsFile(SettingsOpenFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
+            }
+            finally
+            {
+                LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
+            }
+        }
+
+        private void LoadedSettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                // 単独ファイル選択のドラッグアンドドロップのみ受け付け、複数選択やフォルダー選択は受け付けない
+                e.Effect = DragDropEffects.None;
+                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
+                if (!File.Exists(droppedItemPath)) { return; }
+
+                e.Effect = DragDropEffects.All;
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "設定ファイルをドラッグ アンド ドロップできません", ex);
+            }
+        }
+
+        private void LoadedSettingsFilePathTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
+                if (droppedItemPath == null) { return; }
+
+                model.LoadSettingsFile(droppedItemPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
+            }
+            finally
+            {
+                LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
+            }
+        }
+
+        #endregion
+
+        #region 入力元フォルダーの選択
+
+        private void BrowseInputDirectoryButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = InputFolderBrowserDialog.ShowDialog(this);
+                if (result != DialogResult.OK) { return; }
+
+                model.SelectInputDirectory(InputFolderBrowserDialog.SelectedPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "入力元フォルダーを選択できません", ex);
+            }
+            finally
+            {
+                SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
+            }
+        }
+
+        private void SelectedInputDirectoryPathTextBox_DragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                // 単独フォルダー選択のドラッグアンドドロップのみ受け付け、複数選択やファイル選択は受け付けない
+                e.Effect = DragDropEffects.None;
+                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
+                if (!Directory.Exists(droppedItemPath)) { return; }
+
+                e.Effect = DragDropEffects.All;
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "入力元フォルダーをドラッグ アンド ドロップできません", ex);
+            }
+        }
+
+        private void SelectedInputDirectoryPathTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
+                if (droppedItemPath == null) { return; }
+
+                model.SelectInputDirectory(droppedItemPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "入力元フォルダーを選択できません", ex);
+            }
+            finally
+            {
+                SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
+            }
+        }
+
+        #endregion
+
+        #region 出力先フォルダーの選択
+
+        private void BrowseOutputDirectoryButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = OutputFolderBrowserDialog.ShowDialog(this);
+                if (result != DialogResult.OK) { return; }
+
+                model.SelectOutputDirectory(OutputFolderBrowserDialog.SelectedPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
+            }
+            finally
+            {
+                SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
+            }
+        }
+
+        private void SelectedOutputDirectoryPathTextBox_DragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                // 単独フォルダー選択のドラッグアンドドロップのみ受け付け、複数選択やファイル選択は受け付けない
+                e.Effect = DragDropEffects.None;
+                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
+                if (!Directory.Exists(droppedItemPath)) { return; }
+
+                e.Effect = DragDropEffects.All;
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "出力先フォルダーをドラッグ アンド ドロップできません", ex);
+            }
+        }
+
+        private void SelectedOutputDirectoryPathTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
+                if (droppedItemPath == null) { return; }
+
+                model.SelectOutputDirectory(droppedItemPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
+            }
+            finally
+            {
+                SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
+            }
         }
 
         #endregion
