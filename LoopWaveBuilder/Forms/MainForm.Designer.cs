@@ -176,7 +176,6 @@ namespace LoopWaveBuilder.Forms
             // ExecuteButton
             // 
             this.ExecuteButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ExecuteButton.Enabled = false;
             this.ExecuteButton.Location = new System.Drawing.Point(226, 162);
             this.ExecuteButton.Margin = new System.Windows.Forms.Padding(3, 3, 9, 9);
             this.ExecuteButton.Name = "ExecuteButton";
@@ -184,17 +183,18 @@ namespace LoopWaveBuilder.Forms
             this.ExecuteButton.TabIndex = 11;
             this.ExecuteButton.Text = "実行";
             this.ExecuteButton.UseVisualStyleBackColor = true;
+            this.ExecuteButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
             // ClearButton
             // 
             this.ClearButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ClearButton.Enabled = false;
             this.ClearButton.Location = new System.Drawing.Point(318, 162);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(80, 28);
             this.ClearButton.TabIndex = 12;
             this.ClearButton.Text = "クリア";
             this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // ExecutionLogListBox
             // 

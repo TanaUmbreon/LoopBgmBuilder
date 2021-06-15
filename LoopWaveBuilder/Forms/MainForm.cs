@@ -239,5 +239,40 @@ namespace LoopWaveBuilder.Forms
         }
 
         #endregion
+
+        private async void ExecuteButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenSettingsFileButton.Enabled = false;
+                BrowseInputDirectoryButton.Enabled = false;
+                BrowseOutputDirectoryButton.Enabled = false;
+                ExecuteButton.Enabled = false;
+                ClearButton.Enabled = false;
+
+                await model.ExecuteAsync();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "ループ加工を実行できません", ex);
+            }
+            finally
+            {
+                OpenSettingsFileButton.Enabled = true;
+                BrowseInputDirectoryButton.Enabled = true;
+                BrowseOutputDirectoryButton.Enabled = true;
+                ExecuteButton.Enabled = true;
+                ClearButton.Enabled = true;
+            }
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            model.Clear();
+
+            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
+            SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
+            SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
+        }
     }
 }

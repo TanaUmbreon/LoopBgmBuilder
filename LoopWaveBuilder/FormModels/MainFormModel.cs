@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using LoopWaveBuilder.Infrastracures;
 using LoopWaveBuilder.Models.Settings;
 
@@ -99,6 +100,49 @@ namespace LoopWaveBuilder.FormModels
                 SelectedOutputDirecotryPath = "";
                 throw;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task ExecuteAsync()
+        {
+            return Task.Run(Execute);
+        }
+
+        private void Execute()
+        {
+            ThrowIfCanNotExecute();
+        }
+
+        private void ThrowIfCanNotExecute()
+        {
+            if (settings == null)
+            {
+                throw new InvalidOperationException("ループ加工設定ファイルを読み込んでください。");
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedInputDirecotryPath))
+            {
+                throw new InvalidOperationException("入力元フォルダーを選択してください。");
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedOutputDirecotryPath))
+            {
+                throw new InvalidOperationException("出力先フォルダーを選択してください。");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Clear()
+        {
+            settings = null;
+            LoadedSettingsFilePath = "";
+            SelectedInputDirecotryPath = "";
+            SelectedOutputDirecotryPath = "";
         }
     }
 }
