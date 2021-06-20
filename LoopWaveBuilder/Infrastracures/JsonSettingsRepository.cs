@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using LoopWaveBuilder.Models.Settings;
+using LoopWaveBuilder.Settings;
 using Newtonsoft.Json;
 
 namespace LoopWaveBuilder.Infrastracures

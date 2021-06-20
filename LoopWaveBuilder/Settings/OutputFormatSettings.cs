@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LoopWaveBuilder.Models.Settings
+namespace LoopWaveBuilder.Settings
 {
     /// <summary>
     /// BGM 出力時のフォーマット設定を格納します。

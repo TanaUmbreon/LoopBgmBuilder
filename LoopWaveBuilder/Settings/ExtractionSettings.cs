@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LoopWaveBuilder.Models.Settings
+namespace LoopWaveBuilder.Settings
 {
     /// <summary>
-    /// BGM 抽出の登録設定を格納します。
+    /// BGM データを抽出する為の設定を格納します。
     /// </summary>
-    public record ExtractionEntrySettings(
+    public record ExtractionSettings(
         string ExtractorName,
         string InputFileName,
         int? LoopBeginSamples,

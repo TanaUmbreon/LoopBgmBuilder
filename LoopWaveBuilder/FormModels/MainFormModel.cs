@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using LoopWaveBuilder.Infrastracures;
-using LoopWaveBuilder.Models.Settings;
+using LoopWaveBuilder.Settings;
 
 namespace LoopWaveBuilder.FormModels
 {
