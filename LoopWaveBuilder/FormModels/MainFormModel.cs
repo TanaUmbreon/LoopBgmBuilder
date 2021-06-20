@@ -9,7 +9,7 @@ namespace LoopWaveBuilder.FormModels
     public class MainFormModel
     {
         /// <summary>読み込んだループ加工設定</summary>
-        private Settings? settings;
+        private WaveBgmProcessingSettings? settings;
 
         /// <summary>
         /// 読み込んだループ加工設定ファイルのパスを取得します。

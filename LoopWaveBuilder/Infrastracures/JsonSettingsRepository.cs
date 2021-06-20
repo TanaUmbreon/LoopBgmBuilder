@@ -11,9 +11,9 @@ namespace LoopWaveBuilder.Infrastracures
     public class JsonSettingsRepository
     {
         /// <summary>
-        /// アプリケーション設定を取得します。
+        /// WAVE 形式の BGM をループ加工する為の設定を取得します。
         /// </summary>
-        public Settings Settings { get; }
+        public WaveBgmProcessingSettings Settings { get; }
 
         /// <summary>
         /// <see cref="JsonSettingsRepository"/> の新しいインスタンスを生成します。
@@ -27,7 +27,7 @@ namespace LoopWaveBuilder.Infrastracures
                 throw new FileNotFoundException($"設定ファイル '{file.FullName}' が見つかりません。");
             }
 
-            Settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(file.FullName))
+            Settings = JsonConvert.DeserializeObject<WaveBgmProcessingSettings>(File.ReadAllText(file.FullName))
                 ?? throw new InvalidCastException();
         }
     }

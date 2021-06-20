@@ -2,6 +2,9 @@
 
 namespace LoopWaveBuilder.Models.Settings
 {
+    /// <summary>
+    /// BGM 出力時のフォーマット設定を格納します。
+    /// </summary>
     public record OutputFormatSettings(
         int BeginingSilenceMiliseconds,
         int LoopCount,
