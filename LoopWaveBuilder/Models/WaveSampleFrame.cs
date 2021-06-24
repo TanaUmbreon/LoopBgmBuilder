@@ -11,7 +11,7 @@ namespace LoopWaveBuilder.Models
     [DebuggerDisplay("{GetSamplesInFrameValues()}")]
     public class WaveSampleFrame : IReadOnlyList<float>
     {
-        private readonly float[] samplesInFrame;
+        public readonly float[] samplesInFrame;
 
         /// <summary>
         /// フレーム内の指定したチャネル インデックスにある音声データ サンプルを取得します。

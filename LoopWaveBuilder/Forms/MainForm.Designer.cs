@@ -33,19 +33,17 @@ namespace LoopWaveBuilder.Forms
             this.LoadedSettingsFilePathTextBox = new System.Windows.Forms.TextBox();
             this.OpenSettingsFileButton = new System.Windows.Forms.Button();
             this.SettingsOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label2 = new System.Windows.Forms.Label();
-            this.SelectedInputDirectoryPathTextBox = new System.Windows.Forms.TextBox();
-            this.BrowseInputDirectoryButton = new System.Windows.Forms.Button();
             this.InputFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.BrowseOutputDirectoryButton = new System.Windows.Forms.Button();
             this.SelectedOutputDirectoryPathTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.OutputFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
-            this.ExecutionLogListBox = new System.Windows.Forms.ListBox();
+            this.ExtractionEntriesListView = new System.Windows.Forms.ListView();
+            this.InputFileNameColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.ExtractorNameColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // label1
@@ -87,44 +85,10 @@ namespace LoopWaveBuilder.Forms
             this.SettingsOpenFileDialog.DefaultExt = "json";
             this.SettingsOpenFileDialog.Filter = "設定ファイル|*.settings.json|すべてのファイル|*.*";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 59);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(176, 15);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Step 2: 入力元フォルダーを指定する";
-            // 
-            // SelectedInputDirectoryPathTextBox
-            // 
-            this.SelectedInputDirectoryPathTextBox.AllowDrop = true;
-            this.SelectedInputDirectoryPathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SelectedInputDirectoryPathTextBox.Location = new System.Drawing.Point(12, 77);
-            this.SelectedInputDirectoryPathTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
-            this.SelectedInputDirectoryPathTextBox.Name = "SelectedInputDirectoryPathTextBox";
-            this.SelectedInputDirectoryPathTextBox.ReadOnly = true;
-            this.SelectedInputDirectoryPathTextBox.Size = new System.Drawing.Size(514, 23);
-            this.SelectedInputDirectoryPathTextBox.TabIndex = 5;
-            this.SelectedInputDirectoryPathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SelectedInputDirectoryPathTextBox_DragDrop);
-            this.SelectedInputDirectoryPathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.SelectedInputDirectoryPathTextBox_DragEnter);
-            // 
-            // BrowseInputDirectoryButton
-            // 
-            this.BrowseInputDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BrowseInputDirectoryButton.Location = new System.Drawing.Point(532, 76);
-            this.BrowseInputDirectoryButton.Name = "BrowseInputDirectoryButton";
-            this.BrowseInputDirectoryButton.Size = new System.Drawing.Size(80, 23);
-            this.BrowseInputDirectoryButton.TabIndex = 6;
-            this.BrowseInputDirectoryButton.Text = "選択...";
-            this.BrowseInputDirectoryButton.UseVisualStyleBackColor = true;
-            this.BrowseInputDirectoryButton.Click += new System.EventHandler(this.BrowseInputDirectoryButton_Click);
-            // 
             // BrowseOutputDirectoryButton
             // 
-            this.BrowseOutputDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BrowseOutputDirectoryButton.Location = new System.Drawing.Point(532, 126);
+            this.BrowseOutputDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BrowseOutputDirectoryButton.Location = new System.Drawing.Point(532, 279);
             this.BrowseOutputDirectoryButton.Name = "BrowseOutputDirectoryButton";
             this.BrowseOutputDirectoryButton.Size = new System.Drawing.Size(80, 23);
             this.BrowseOutputDirectoryButton.TabIndex = 9;
@@ -135,9 +99,9 @@ namespace LoopWaveBuilder.Forms
             // SelectedOutputDirectoryPathTextBox
             // 
             this.SelectedOutputDirectoryPathTextBox.AllowDrop = true;
-            this.SelectedOutputDirectoryPathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.SelectedOutputDirectoryPathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SelectedOutputDirectoryPathTextBox.Location = new System.Drawing.Point(12, 127);
+            this.SelectedOutputDirectoryPathTextBox.Location = new System.Drawing.Point(12, 280);
             this.SelectedOutputDirectoryPathTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
             this.SelectedOutputDirectoryPathTextBox.Name = "SelectedOutputDirectoryPathTextBox";
             this.SelectedOutputDirectoryPathTextBox.ReadOnly = true;
@@ -148,21 +112,13 @@ namespace LoopWaveBuilder.Forms
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 109);
+            this.label3.Location = new System.Drawing.Point(12, 262);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(176, 15);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Step 3: 出力先フォルダーを指定する";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 199);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 15);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "実行ログ:";
+            this.label3.Text = "Step 2: 出力先フォルダーを指定する";
             // 
             // button2
             // 
@@ -175,8 +131,8 @@ namespace LoopWaveBuilder.Forms
             // 
             // ExecuteButton
             // 
-            this.ExecuteButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ExecuteButton.Location = new System.Drawing.Point(226, 162);
+            this.ExecuteButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.ExecuteButton.Location = new System.Drawing.Point(226, 315);
             this.ExecuteButton.Margin = new System.Windows.Forms.Padding(3, 3, 9, 9);
             this.ExecuteButton.Name = "ExecuteButton";
             this.ExecuteButton.Size = new System.Drawing.Size(80, 28);
@@ -187,8 +143,8 @@ namespace LoopWaveBuilder.Forms
             // 
             // ClearButton
             // 
-            this.ClearButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ClearButton.Location = new System.Drawing.Point(318, 162);
+            this.ClearButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.ClearButton.Location = new System.Drawing.Point(318, 315);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(80, 28);
             this.ClearButton.TabIndex = 12;
@@ -196,34 +152,44 @@ namespace LoopWaveBuilder.Forms
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
-            // ExecutionLogListBox
+            // ExtractionEntriesListView
             // 
-            this.ExecutionLogListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.ExtractionEntriesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExecutionLogListBox.FormattingEnabled = true;
-            this.ExecutionLogListBox.HorizontalScrollbar = true;
-            this.ExecutionLogListBox.ItemHeight = 15;
-            this.ExecutionLogListBox.Location = new System.Drawing.Point(12, 217);
-            this.ExecutionLogListBox.Name = "ExecutionLogListBox";
-            this.ExecutionLogListBox.Size = new System.Drawing.Size(600, 214);
-            this.ExecutionLogListBox.TabIndex = 13;
+            this.ExtractionEntriesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.InputFileNameColumnHeader,
+            this.ExtractorNameColumnHeader});
+            this.ExtractionEntriesListView.HideSelection = false;
+            this.ExtractionEntriesListView.Location = new System.Drawing.Point(12, 62);
+            this.ExtractionEntriesListView.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
+            this.ExtractionEntriesListView.Name = "ExtractionEntriesListView";
+            this.ExtractionEntriesListView.Size = new System.Drawing.Size(600, 191);
+            this.ExtractionEntriesListView.TabIndex = 13;
+            this.ExtractionEntriesListView.UseCompatibleStateImageBehavior = false;
+            this.ExtractionEntriesListView.View = System.Windows.Forms.View.Details;
+            // 
+            // InputFileNameColumnHeader
+            // 
+            this.InputFileNameColumnHeader.Text = "抽出対象の WAV ファイル";
+            this.InputFileNameColumnHeader.Width = 400;
+            // 
+            // ExtractorNameColumnHeader
+            // 
+            this.ExtractorNameColumnHeader.Text = "BGM 抽出パターン";
+            this.ExtractorNameColumnHeader.Width = 160;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.ExecutionLogListBox);
+            this.ClientSize = new System.Drawing.Size(624, 361);
+            this.Controls.Add(this.ExtractionEntriesListView);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.ExecuteButton);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.BrowseOutputDirectoryButton);
             this.Controls.Add(this.SelectedOutputDirectoryPathTextBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.BrowseInputDirectoryButton);
-            this.Controls.Add(this.SelectedInputDirectoryPathTextBox);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.OpenSettingsFileButton);
             this.Controls.Add(this.LoadedSettingsFilePathTextBox);
             this.Controls.Add(this.label1);
@@ -242,19 +208,17 @@ namespace LoopWaveBuilder.Forms
         private System.Windows.Forms.TextBox LoadedSettingsFilePathTextBox;
         private System.Windows.Forms.Button OpenSettingsFileButton;
         private System.Windows.Forms.OpenFileDialog SettingsOpenFileDialog;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox SelectedInputDirectoryPathTextBox;
-        private System.Windows.Forms.Button BrowseInputDirectoryButton;
         private System.Windows.Forms.FolderBrowserDialog InputFolderBrowserDialog;
         private System.Windows.Forms.Button BrowseOutputDirectoryButton;
         private System.Windows.Forms.TextBox SelectedOutputDirectoryPathTextBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.FolderBrowserDialog OutputFolderBrowserDialog;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button ExecuteButton;
         private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.ListBox ExecutionLogListBox;
+        private System.Windows.Forms.ListView ExtractionEntriesListView;
+        private System.Windows.Forms.ColumnHeader InputFileNameColumnHeader;
+        private System.Windows.Forms.ColumnHeader ExtractorNameColumnHeader;
     }
 }
 

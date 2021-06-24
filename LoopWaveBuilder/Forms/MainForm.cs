@@ -19,9 +19,55 @@ namespace LoopWaveBuilder.Forms
         public MainForm()
         {
             InitializeComponent();
-            Text = AssemblyInfo.Title;
 
             model = new MainFormModel();
+            model.StateChanged += Model_StateChanged;
+            model.Clear();
+        }
+
+        private void Model_StateChanged(object? sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { Model_StateChanged(sender, e); }));
+                return;
+            }
+
+            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
+            SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
+
+            switch (model.State)
+            {
+                case MainFormModelState.Initialized:
+                    OpenSettingsFileButton.Enabled = true;
+                    ExtractionEntriesListView.Items.Clear();
+
+                    BrowseOutputDirectoryButton.Enabled = true;
+
+                    ExecuteButton.Enabled = true;
+                    ClearButton.Enabled = true;
+
+                    Text = AssemblyInfo.Title;
+                    break;
+
+                case MainFormModelState.LoadedSettings:
+                    //ExtractionEntriesListView.Items.Add();
+                    break;
+
+                case MainFormModelState.Executing:
+                    OpenSettingsFileButton.Enabled = false;
+                    BrowseOutputDirectoryButton.Enabled = false;
+                    ExecuteButton.Enabled = false;
+                    ClearButton.Enabled = false;
+                    break;
+
+                case MainFormModelState.Executed:
+                    OpenSettingsFileButton.Enabled = true;
+                    BrowseOutputDirectoryButton.Enabled = true;
+                    ExecuteButton.Enabled = true;
+                    ClearButton.Enabled = true;
+                    break;
+            }
         }
 
         #region 汎用
@@ -63,7 +109,7 @@ namespace LoopWaveBuilder.Forms
 
         #endregion
 
-        #region 設定ファイルの選択
+        #region 設定ファイルの読み込み
 
         private void OpenSettingsFileButton_Click(object sender, EventArgs e)
         {
@@ -77,10 +123,6 @@ namespace LoopWaveBuilder.Forms
             catch (Exception ex)
             {
                 ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
-            }
-            finally
-            {
-                LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
             }
         }
 
@@ -114,69 +156,6 @@ namespace LoopWaveBuilder.Forms
             {
                 ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
             }
-            finally
-            {
-                LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
-            }
-        }
-
-        #endregion
-
-        #region 入力元フォルダーの選択
-
-        private void BrowseInputDirectoryButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var result = InputFolderBrowserDialog.ShowDialog(this);
-                if (result != DialogResult.OK) { return; }
-
-                model.SelectInputDirectory(InputFolderBrowserDialog.SelectedPath);
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "入力元フォルダーを選択できません", ex);
-            }
-            finally
-            {
-                SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
-            }
-        }
-
-        private void SelectedInputDirectoryPathTextBox_DragEnter(object sender, DragEventArgs e)
-        {
-            try
-            {
-                // 単独フォルダー選択のドラッグアンドドロップのみ受け付け、複数選択やファイル選択は受け付けない
-                e.Effect = DragDropEffects.None;
-                if (!TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath)) { return; }
-                if (!Directory.Exists(droppedItemPath)) { return; }
-
-                e.Effect = DragDropEffects.All;
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "入力元フォルダーをドラッグ アンド ドロップできません", ex);
-            }
-        }
-
-        private void SelectedInputDirectoryPathTextBox_DragDrop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
-                if (droppedItemPath == null) { return; }
-
-                model.SelectInputDirectory(droppedItemPath);
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "入力元フォルダーを選択できません", ex);
-            }
-            finally
-            {
-                SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
-            }
         }
 
         #endregion
@@ -195,10 +174,6 @@ namespace LoopWaveBuilder.Forms
             catch (Exception ex)
             {
                 ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
-            }
-            finally
-            {
-                SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
             }
         }
 
@@ -232,10 +207,6 @@ namespace LoopWaveBuilder.Forms
             {
                 ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
             }
-            finally
-            {
-                SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
-            }
         }
 
         #endregion
@@ -244,35 +215,17 @@ namespace LoopWaveBuilder.Forms
         {
             try
             {
-                OpenSettingsFileButton.Enabled = false;
-                BrowseInputDirectoryButton.Enabled = false;
-                BrowseOutputDirectoryButton.Enabled = false;
-                ExecuteButton.Enabled = false;
-                ClearButton.Enabled = false;
-
                 await model.ExecuteAsync();
             }
             catch (Exception ex)
             {
                 ShowErrorDialog(Text, "ループ加工を実行できません", ex);
             }
-            finally
-            {
-                OpenSettingsFileButton.Enabled = true;
-                BrowseInputDirectoryButton.Enabled = true;
-                BrowseOutputDirectoryButton.Enabled = true;
-                ExecuteButton.Enabled = true;
-                ClearButton.Enabled = true;
-            }
         }
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
             model.Clear();
-
-            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
-            SelectedInputDirectoryPathTextBox.Text = model.SelectedInputDirecotryPath;
-            SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
         }
     }
 }
