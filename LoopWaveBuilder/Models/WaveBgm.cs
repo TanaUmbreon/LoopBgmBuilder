@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using System.Collections.Generic;
+using NAudio.Wave;
 
 namespace LoopWaveBuilder.Models
 {
@@ -15,12 +16,12 @@ namespace LoopWaveBuilder.Models
         /// <summary>
         /// 開始部の波形データを取得します。
         /// </summary>
-        public byte[] BeginingPart { get; }
+        public WaveSampleFrame[] BeginingPart { get; }
 
         /// <summary>
         /// ループ部の波形データを取得します。
         /// </summary>
-        public byte[] LoopPart { get; }
+        public WaveSampleFrame[] LoopPart { get; }
 
         /// <summary>
         /// <see cref="WaveBgm"/> の新しいインスタンスを生成します。
@@ -28,7 +29,7 @@ namespace LoopWaveBuilder.Models
         /// <param name="waveFormat">WAVE 形式のフォーマット情報。</param>
         /// <param name="beginingPart">開始部の波形データ。</param>
         /// <param name="loopPart">ループ部の波形データ。</param>
-        public WaveBgm(WaveFormat waveFormat, byte[] beginingPart, byte[] loopPart)
+        public WaveBgm(WaveFormat waveFormat, WaveSampleFrame[] beginingPart, WaveSampleFrame[] loopPart)
         {
             WaveFormat = waveFormat;
             BeginingPart = beginingPart;
