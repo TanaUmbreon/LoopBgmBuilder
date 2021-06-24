@@ -9,14 +9,14 @@
   "ExtractionEntries": [
     {
       "ExtractorName": "PartialLoop",
-      "InputFileName": "1_1_Theme.wav",
+      "InputFileName": "C:\\Program Files (x86)\\Steam\\steamapps\\music\\Library Of Ruina Soundtrack\\wav\\1_1_Theme.wav",
       "LoopBeginSamples": 1628132,
       "LoopEndSamples": 5373415,
       "TrimsBeginingSilence": true
     },
     {
       "ExtractorName": "FullLoop",
-      "InputFileName": "2_1_Lobby.wav",
+      "InputFileName": "C:\\Program Files (x86)\\Steam\\steamapps\\music\\Library Of Ruina Soundtrack\\wav\\2_1_Lobby.wav",
       "TrimsBeginingSilence": true,
       "TrimsEndingSilence": true
     }
