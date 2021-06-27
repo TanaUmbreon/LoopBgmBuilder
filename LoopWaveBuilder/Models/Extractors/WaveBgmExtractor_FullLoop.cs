@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using LoopWaveBuilder.Settings;
 using NAudio.Wave;
 
@@ -8,39 +7,42 @@ namespace LoopWaveBuilder.Models.Extractors
     /// <summary>
     /// 末尾まで再生すると先頭からループ再生する構成の WAVE 形式の BGM データを抽出します。
     /// </summary>
-    public class WaveBgmExtractor_FullLoop : IWaveBgmExtractor
+    public class WaveBgmExtractor_FullLoop : WaveBgmExtractorBase
     {
-        /// <summary>読み込む WAV ファイルの名前</summary>
-        private readonly string inputFileName;
-        /// <summary>BGM 先頭の無音をトリミングすることを示すフラグ</summary>
-        private readonly bool trimsBeginingSilence;
-        /// <summary>BGM 末尾の無音をトリミングすることを示すフラグ</summary>
-        private readonly bool trimsEndingSilence;
+        /// <summary>
+        /// BGM 先頭の無音をトリミングすることを示す値を取得します。
+        /// </summary>
+        public bool TrimsBeginingSilence { get; }
+        
+        /// <summary>
+        /// BGM 末尾の無音をトリミングすることを示す値を取得します。
+        /// </summary>
+        public bool TrimsEndingSilence { get; }
 
         /// <summary>
         /// <see cref="WaveBgmExtractor_FullLoop"/> の新しいインスタンスを生成します。
         /// </summary>
-        /// <param name="settings">BGM を抽出する為の設定。</param>
+        /// <param name="settings">BGM データを抽出するための設定。</param>
         public WaveBgmExtractor_FullLoop(ExtractionSettings settings)
+            : base(settings)
         {
-            inputFileName = settings.InputFileName;
-            trimsBeginingSilence = settings.TrimsBeginingSilence ?? false;
-            trimsEndingSilence = settings.TrimsEndingSilence ?? false;
+            TrimsBeginingSilence = settings.TrimsBeginingSilence ?? false;
+            TrimsEndingSilence = settings.TrimsEndingSilence ?? false;
         }
 
-        public WaveBgm Extract()
+        public override WaveBgm Extract()
         {
             WaveFormat format;
             WaveSampleFrame[] buffer;
 
-            using (var reader = new WaveFileReaderEx(inputFileName))
+            using (var reader = new WaveFileReaderEx(InputFullName))
             {
                 format = reader.WaveFormat;
                 buffer = reader.ReadToEnd();
             }
 
-            int soundBeginFrames = trimsBeginingSilence ? GetSoundBeginFrames(buffer) : 0;
-            int soundEndFrames = trimsEndingSilence ? GetSoundEndFrames(buffer) : buffer.Length - 1;
+            int soundBeginFrames = TrimsBeginingSilence ? GetSoundBeginFrames(buffer) : 0;
+            int soundEndFrames = TrimsEndingSilence ? GetSoundEndFrames(buffer) : buffer.Length - 1;
 
             return new WaveBgm(format,
                 Array.Empty<WaveSampleFrame>(),

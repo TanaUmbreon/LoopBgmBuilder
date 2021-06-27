@@ -7,47 +7,53 @@ namespace LoopWaveBuilder.Models.Extractors
     /// <summary>
     /// 特定の位置まで再生すると特定の位置からループ再生する構成の WAVE 形式の BGM データを抽出します。
     /// </summary>
-    public class WaveBgmExtractor_PartialLoop : IWaveBgmExtractor
+    public class WaveBgmExtractor_PartialLoop : WaveBgmExtractorBase
     {
         private const int DefaultLoopEnd = -1;
 
-        /// <summary>読み込む WAV ファイルの名前</summary>
-        private readonly string inputFileName;
-        /// <summary>BGM 先頭の無音をトリミングすることを示すフラグ</summary>
-        private readonly bool trimsBeginingSilence;
-        /// <summary>ループ再生の開始フレーム位置</summary>
-        private readonly int loopBeginFrames;
-        /// <summary>ループ再生の終了フレーム位置</summary>
-        private readonly int loopEndFrames;
+        /// <summary>
+        /// BGM 先頭の無音をトリミングすることを示す値を取得します。
+        /// </summary>
+        public bool TrimsBeginingSilence { get; }
+
+        /// <summary>
+        /// ループ再生の開始フレーム位置を取得します。
+        /// </summary>
+        public int LoopBeginFrames { get; }
+
+        /// <summary>
+        /// ループ再生の終了フレーム位置を取得します。
+        /// </summary>
+        public int LoopEndFrames { get; }
 
         /// <summary>
         /// <see cref="WaveBgmExtractor_PartialLoop"/> の新しいインスタンスを生成します。
         /// </summary>
-        /// <param name="settings">BGM を抽出する為の設定。</param>
+        /// <param name="settings">BGM データを抽出するための設定。</param>
         public WaveBgmExtractor_PartialLoop(ExtractionSettings settings)
+            : base(settings)
         {
-            inputFileName = settings.InputFileName;
-            trimsBeginingSilence = settings.TrimsBeginingSilence ?? false;
-            loopBeginFrames = settings.LoopBeginSamples ?? 0;
-            loopEndFrames = settings.LoopEndSamples ?? DefaultLoopEnd;
+            TrimsBeginingSilence = settings.TrimsBeginingSilence ?? false;
+            LoopBeginFrames = settings.LoopBeginSamples ?? 0;
+            LoopEndFrames = settings.LoopEndSamples ?? DefaultLoopEnd;
         }
 
-        public WaveBgm Extract()
+        public override WaveBgm Extract()
         {
             WaveFormat format;
             WaveSampleFrame[] buffer;
 
-            using (var reader = new WaveFileReaderEx(inputFileName))
+            using (var reader = new WaveFileReaderEx(InputFullName))
             {
                 format = reader.WaveFormat;
                 buffer = reader.ReadToEnd();
             }
 
-            int soundBeginFrames = trimsBeginingSilence ? GetSoundBeginFrames(buffer) : 0;
+            int soundBeginFrames = TrimsBeginingSilence ? GetSoundBeginFrames(buffer) : 0;
 
-            int correctedLoopBeginFrames = Math.Max(loopBeginFrames, soundBeginFrames);
+            int correctedLoopBeginFrames = Math.Max(LoopBeginFrames, soundBeginFrames);
 
-            int correctedLoopEndFrames = loopEndFrames == DefaultLoopEnd ? buffer.Length - 1 : loopEndFrames;
+            int correctedLoopEndFrames = LoopEndFrames == DefaultLoopEnd ? buffer.Length - 1 : LoopEndFrames;
             correctedLoopEndFrames = Math.Min(correctedLoopEndFrames, buffer.Length - 1);
             correctedLoopEndFrames = Math.Max(correctedLoopEndFrames, correctedLoopBeginFrames);
 
