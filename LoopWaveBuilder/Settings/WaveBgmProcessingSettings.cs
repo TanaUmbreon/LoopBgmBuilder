@@ -6,8 +6,8 @@ namespace LoopWaveBuilder.Settings
     /// WAVE 形式の BGM をループ加工する為の設定を格納します。
     /// </summary>
     public record WaveBgmProcessingSettings(
-        OutputFormatSettings DefaultOutputFormat,
-        IEnumerable<ExtractionSettings> ExtractionEntries)
+        DefaultOutputFormatSettings DefaultOutputFormat,
+        IEnumerable<ExtractionSettings> Extractions)
     {
         /// <summary>
         /// インスタンスの状態を検証し、検証に失敗した場合は例外をスローします。
@@ -15,9 +15,9 @@ namespace LoopWaveBuilder.Settings
         public void ThrowIfValidationFailed()
         {
             DefaultOutputFormat.ThrowIfValidationFailed();
-            foreach(var entry in ExtractionEntries)
+            foreach(var extraction in Extractions)
             {
-                entry.ThrowIfValidationFailed();
+                extraction.ThrowIfValidationFailed();
             }
         }
     }

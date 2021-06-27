@@ -6,17 +6,17 @@
     "FadeoutMiliseconds": 10000,
     "EndingSilenceMiliseconds": 1000
   },
-  "ExtractionEntries": [
+  "Extractions": [
     {
-      "ExtractorName": "PartialLoop",
       "InputFileName": "C:\\Program Files (x86)\\Steam\\steamapps\\music\\Library Of Ruina Soundtrack\\wav\\1_1_Theme.wav",
+      "ExtractorName": "PartialLoop",
       "LoopBeginSamples": 1628132,
       "LoopEndSamples": 5373415,
       "TrimsBeginingSilence": true
     },
     {
-      "ExtractorName": "FullLoop",
       "InputFileName": "C:\\Program Files (x86)\\Steam\\steamapps\\music\\Library Of Ruina Soundtrack\\wav\\2_1_Lobby.wav",
+      "ExtractorName": "FullLoop",
       "TrimsBeginingSilence": true,
       "TrimsEndingSilence": true
     }

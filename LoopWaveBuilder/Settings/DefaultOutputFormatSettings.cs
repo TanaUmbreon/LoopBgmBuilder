@@ -3,9 +3,9 @@
 namespace LoopWaveBuilder.Settings
 {
     /// <summary>
-    /// BGM 出力時のフォーマット設定を格納します。
+    /// BGM 出力時の規定のフォーマット設定を格納します。
     /// </summary>
-    public record OutputFormatSettings(
+    public record DefaultOutputFormatSettings(
         int BeginingSilenceMiliseconds,
         int LoopCount,
         int FadeoutDelayMiliseconds,
