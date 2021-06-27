@@ -16,8 +16,43 @@ namespace LoopWaveBuilder.FormModels
     /// </summary>
     public class MainFormModel
     {
-        /// <summary>読み込んだループ加工設定</summary>
-        private WaveBgmProcessingSettings? settings;
+        /// <summary>読み込んだループ加工設定リポジトリ</summary>
+        private JsonSettingsRepository? repository;
+        /// <summary>読み込んだ BGM データ抽出オブジェクト</summary>
+        private IEnumerable<IWaveBgmExtractor>? extrators;
+
+        /// <summary>
+        /// 読み込んだループ加工設定ファイルの完全パスを取得します。
+        /// </summary>
+        public string LoadedSettingsFullName => repository?.FullName ?? "";
+
+        /// <summary>
+        /// 読み込んだループ加工設定ファイルが格納されているフォルダーのパスを取得します。
+        /// </summary>
+        public string LoadedSettingsFolderPath => repository?.FolderPath ?? "";
+
+        /// <summary>
+        /// 読み込んだループ加工設定ファイルの名前を取得します。
+        /// </summary>
+        public string LoadedSettingsFileName => repository?.FileName ?? "";
+
+        /// <summary>
+        /// 読み込んだループ加工設定から生成された BGM データ抽出オブジェクトのコレクションを取得します。
+        /// </summary>
+        public IEnumerable<IWaveBgmExtractor> Extractors
+            => extrators ?? Array.Empty<IWaveBgmExtractor>();
+
+        /// <summary>
+        /// 選択した出力先フォルダーのパスを取得します。
+        /// </summary>
+        public string SelectedOutputFolderPath { get; private set; } = "";
+
+        /// <summary>
+        /// <see cref="MainFormModel"/> の新しいインスタンスを生成します。
+        /// </summary>
+        public MainFormModel() { }
+
+        #region 状態遷移
 
         /// <summary>
         /// 画面の状態を取得します。
@@ -25,34 +60,23 @@ namespace LoopWaveBuilder.FormModels
         public MainFormModelState State { get; private set; } = MainFormModelState.Initialized;
 
         /// <summary>
-        /// 読み込んだループ加工設定ファイルのパスを取得します。
-        /// </summary>
-        public string LoadedSettingsFilePath { get; private set; } = "";
-
-        /// <summary>
-        /// 選択した出力先フォルダーのパスを取得します。
-        /// </summary>
-        public string SelectedOutputDirecotryPath { get; private set; } = "";
-
-        /// <summary>
-        /// <see cref="MainFormModel"/> の新しいインスタンスを生成します。
-        /// </summary>
-        public MainFormModel() { }
-
-        #region イベント
-
-        /// <summary>
         /// 状態が遷移した時に呼び出されます。
         /// </summary>
         public event EventHandler? StateChanged;
 
         /// <summary>
-        /// <see cref="StateChanged"/> イベントを呼び出します。
+        /// 指定した状態に遷移させ、<see cref="StateChanged"/> イベントを呼び出します。
         /// </summary>
-        protected virtual void OnStateChanged()
-            => StateChanged?.Invoke(this, EventArgs.Empty);
+        /// <param name="newState">遷移させる新しい状態。</param>
+        protected virtual void OnStateChanged(MainFormModelState newState)
+        {
+            State = newState;
+            StateChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         #endregion
+
+        #region ループ加工設定ファイルの読み込み
 
         /// <summary>
         /// 指定したループ加工設定ファイルを読み込みます。
@@ -62,109 +86,120 @@ namespace LoopWaveBuilder.FormModels
         {
             try
             {
-                var file = new FileInfo(fileName);
-                if (!file.Exists) { throw new FileNotFoundException(); }
+                var repository = new JsonSettingsRepository(fileName);
+                var extrators = repository.Settings.Extractions.Select(e => WaveBgmExtractorFactory.Create(e));
 
-                var repository = new JsonSettingsRepository(file.FullName);
-                repository.Settings.ThrowIfValidationFailed();
-
-                settings = repository.Settings;
-                LoadedSettingsFilePath = file.FullName;
-
-                State = MainFormModelState.LoadedSettings;
-                OnStateChanged();
+                this.repository = repository;
+                this.extrators = extrators;
+                OnStateChanged(MainFormModelState.LoadSettingsSuccessful);
             }
-            catch (Exception)
+            catch
             {
-                settings = null;
-                LoadedSettingsFilePath = "";
+                repository = null;
+                extrators = null;
+                OnStateChanged(MainFormModelState.LoadSettingsFailed);
                 throw;
             }
         }
+
+        #endregion
+
+        #region 出力先フォルダーの選択
 
         /// <summary>
         /// 指定した出力先フォルダーを選択します。
         /// </summary>
-        /// <param name="direcoryName">入力元フォルダーの名前。</param>
-        public void SelectOutputDirectory(string direcoryName)
+        /// <param name="folderPath">選択する出力先フォルダーのパス。</param>
+        public void SelectOutputFolder(string folderPath)
         {
             try
             {
-                var dir = new DirectoryInfo(direcoryName);
-                if (!dir.Exists) { throw new DirectoryNotFoundException(); }
+                var dir = new DirectoryInfo(folderPath);
 
-                SelectedOutputDirecotryPath = dir.FullName;
+                SelectedOutputFolderPath = dir.FullName;
+                OnStateChanged(MainFormModelState.LoadSettingsSuccessful);
             }
-            catch (Exception)
+            catch
             {
-                SelectedOutputDirecotryPath = "";
+                SelectedOutputFolderPath = "";
+                OnStateChanged(MainFormModelState.LoadSettingsFailed);
                 throw;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task ExecuteAsync()
-        {
-            return Task.Run(Execute);
-        }
+        #endregion
 
+        #region ループ加工の実行
+
+        /// <summary>
+        /// ループ加工を非同期で実行します。
+        /// </summary>
+        /// <returns>非同期操作。</returns>
+        public Task ExecuteAsync()
+            => Task.Run(Execute);
+
+        /// <summary>
+        /// ループ加工を実行します。
+        /// </summary>
         private void Execute()
         {
-            if (settings == null)
+            if ((repository == null) || (extrators == null))
             {
                 throw new InvalidOperationException("ループ加工設定ファイルを読み込んでください。");
             }
-            if (string.IsNullOrWhiteSpace(SelectedOutputDirecotryPath))
+            if (!extrators.Any())
+            {
+                throw new InvalidOperationException("ループ加工設定ファイルに 1 つ以上の BGM 抽出設定を記述してください。");
+            }
+            if (string.IsNullOrWhiteSpace(SelectedOutputFolderPath))
             {
                 throw new InvalidOperationException("出力先フォルダーを選択してください。");
             }
 
             try
             {
-                State = MainFormModelState.Executing;
-                OnStateChanged();
+                OnStateChanged(MainFormModelState.Executing);
 
                 var exceptions = new List<Exception>();
-                foreach (ExtractionSettings extraction in settings.ExtractionEntries)
+                foreach (IWaveBgmExtractor extrator in extrators)
                 {
                     try
                     {
-                        IWaveBgmExtractor extrator = WaveBgmExtractorFactory.Create(extraction);
                         WaveBgm bgm = extrator.Extract();
 
-                        string outFileName = Path.Combine(SelectedOutputDirecotryPath, Path.GetFileName(extraction.InputFileName));
-                        using (var writer = new WaveFileWriter(outFileName, bgm.WaveFormat))
+                        string outFileName = Path.Combine(SelectedOutputFolderPath, Path.GetFileName(extrator.InputFileName));
+                        using var writer = new WaveFileWriter(outFileName, bgm.WaveFormat);
+ 
+                        if (bgm.BeginingPart.Length > 0)
                         {
-                            if (bgm.BeginingPart.Length > 0)
+                            var begining = new List<float>(bgm.BeginingPart.Length * bgm.WaveFormat.Channels);
+                            foreach (WaveSampleFrame frame in bgm.BeginingPart)
                             {
-                                var begining = new List<float>(bgm.BeginingPart.Length * bgm.WaveFormat.Channels);
-                                foreach (WaveSampleFrame frame in bgm.BeginingPart)
-                                {
-                                    begining.AddRange(frame.samplesInFrame);
-                                }
-                                writer.WriteSamples(begining.ToArray(), 0, begining.Count);
+                                begining.AddRange(frame.samplesInFrame);
                             }
+                            writer.WriteSamples(begining.ToArray(), 0, begining.Count);
+                        }
 
-                            if (bgm.LoopPart.Length > 0 && settings.DefaultOutputFormat.LoopCount > 0)
+                        if (bgm.LoopPart.Length > 0 && repository.Settings.DefaultOutputFormat.LoopCount > 0)
+                        {
+                            var loop = new List<float>(bgm.LoopPart.Length * bgm.WaveFormat.Channels);
+                            foreach (WaveSampleFrame frame in bgm.LoopPart)
                             {
-                                var loop = new List<float>(bgm.LoopPart.Length * bgm.WaveFormat.Channels);
-                                foreach (WaveSampleFrame frame in bgm.LoopPart)
-                                {
-                                    loop.AddRange(frame.samplesInFrame);
-                                }
-                                for (int loopCount = 0; loopCount < settings.DefaultOutputFormat.LoopCount; loopCount++)
-                                {
-                                    writer.WriteSamples(loop.ToArray(), 0, loop.Count);
-                                }
+                                loop.AddRange(frame.samplesInFrame);
+                            }
+                            for (int loopCount = 0; loopCount < repository.Settings.DefaultOutputFormat.LoopCount; loopCount++)
+                            {
+                                writer.WriteSamples(loop.ToArray(), 0, loop.Count);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         exceptions.Add(ex);
+                    }
+                    finally
+                    {
+                        GC.Collect();
                     }
                 }
                 if (exceptions.Any())
@@ -175,22 +210,22 @@ namespace LoopWaveBuilder.FormModels
             }
             finally
             {
-                State = MainFormModelState.Executed;
-                OnStateChanged();
+                OnStateChanged(MainFormModelState.Executed);
             }
         }
+
+        #endregion
 
         /// <summary>
         /// 初期状態にクリアします。
         /// </summary>
         public void Clear()
         {
-            settings = null;
-            LoadedSettingsFilePath = "";
-            SelectedOutputDirecotryPath = "";
+            repository = null;
+            extrators = null;
+            SelectedOutputFolderPath = "";
 
-            State = MainFormModelState.Initialized;
-            OnStateChanged();
+            OnStateChanged(MainFormModelState.Initialized);
         }
     }
 }

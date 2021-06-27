@@ -7,8 +7,10 @@
     {
         /// <summary>初期化完了</summary>
         Initialized,
-        /// <summary>設定ファイルの読み込み完了</summary>
-        LoadedSettings,
+        /// <summary>ループ加工設定ファイルの読み込みに成功</summary>
+        LoadSettingsSuccessful,
+        /// <summary>ループ加工設定ファイルの読み込みに失敗</summary>
+        LoadSettingsFailed,
         /// <summary>実行中</summary>
         Executing,
         /// <summary>実行完了</summary>

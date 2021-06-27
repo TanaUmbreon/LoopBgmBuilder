@@ -33,17 +33,17 @@ namespace LoopWaveBuilder.Forms
             this.LoadedSettingsFilePathTextBox = new System.Windows.Forms.TextBox();
             this.OpenSettingsFileButton = new System.Windows.Forms.Button();
             this.SettingsOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.InputFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.BrowseOutputDirectoryButton = new System.Windows.Forms.Button();
-            this.SelectedOutputDirectoryPathTextBox = new System.Windows.Forms.TextBox();
+            this.BrowseOutputFolderButton = new System.Windows.Forms.Button();
+            this.SelectedOutputFolderPathTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.OutputFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.button2 = new System.Windows.Forms.Button();
             this.ExecuteButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
-            this.ExtractionEntriesListView = new System.Windows.Forms.ListView();
+            this.ExtractionsListView = new System.Windows.Forms.ListView();
             this.InputFileNameColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.ExtractorNameColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.InputFolderPathColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // label1
@@ -51,9 +51,9 @@ namespace LoopWaveBuilder.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(157, 15);
+            this.label1.Size = new System.Drawing.Size(208, 15);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Step 1: 設定ファイルを読み込む";
+            this.label1.Text = "Step 1: ループ加工設定ファイルを読み込む";
             // 
             // LoadedSettingsFilePathTextBox
             // 
@@ -85,30 +85,30 @@ namespace LoopWaveBuilder.Forms
             this.SettingsOpenFileDialog.DefaultExt = "json";
             this.SettingsOpenFileDialog.Filter = "設定ファイル|*.settings.json|すべてのファイル|*.*";
             // 
-            // BrowseOutputDirectoryButton
+            // BrowseOutputFolderButton
             // 
-            this.BrowseOutputDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BrowseOutputDirectoryButton.Location = new System.Drawing.Point(532, 279);
-            this.BrowseOutputDirectoryButton.Name = "BrowseOutputDirectoryButton";
-            this.BrowseOutputDirectoryButton.Size = new System.Drawing.Size(80, 23);
-            this.BrowseOutputDirectoryButton.TabIndex = 9;
-            this.BrowseOutputDirectoryButton.Text = "選択...";
-            this.BrowseOutputDirectoryButton.UseVisualStyleBackColor = true;
-            this.BrowseOutputDirectoryButton.Click += new System.EventHandler(this.BrowseOutputDirectoryButton_Click);
+            this.BrowseOutputFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BrowseOutputFolderButton.Location = new System.Drawing.Point(532, 279);
+            this.BrowseOutputFolderButton.Name = "BrowseOutputFolderButton";
+            this.BrowseOutputFolderButton.Size = new System.Drawing.Size(80, 23);
+            this.BrowseOutputFolderButton.TabIndex = 9;
+            this.BrowseOutputFolderButton.Text = "選択...";
+            this.BrowseOutputFolderButton.UseVisualStyleBackColor = true;
+            this.BrowseOutputFolderButton.Click += new System.EventHandler(this.BrowseOutputFolderButton_Click);
             // 
-            // SelectedOutputDirectoryPathTextBox
+            // SelectedOutputFolderPathTextBox
             // 
-            this.SelectedOutputDirectoryPathTextBox.AllowDrop = true;
-            this.SelectedOutputDirectoryPathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.SelectedOutputFolderPathTextBox.AllowDrop = true;
+            this.SelectedOutputFolderPathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SelectedOutputDirectoryPathTextBox.Location = new System.Drawing.Point(12, 280);
-            this.SelectedOutputDirectoryPathTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
-            this.SelectedOutputDirectoryPathTextBox.Name = "SelectedOutputDirectoryPathTextBox";
-            this.SelectedOutputDirectoryPathTextBox.ReadOnly = true;
-            this.SelectedOutputDirectoryPathTextBox.Size = new System.Drawing.Size(514, 23);
-            this.SelectedOutputDirectoryPathTextBox.TabIndex = 8;
-            this.SelectedOutputDirectoryPathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SelectedOutputDirectoryPathTextBox_DragDrop);
-            this.SelectedOutputDirectoryPathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.SelectedOutputDirectoryPathTextBox_DragEnter);
+            this.SelectedOutputFolderPathTextBox.Location = new System.Drawing.Point(12, 280);
+            this.SelectedOutputFolderPathTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
+            this.SelectedOutputFolderPathTextBox.Name = "SelectedOutputFolderPathTextBox";
+            this.SelectedOutputFolderPathTextBox.ReadOnly = true;
+            this.SelectedOutputFolderPathTextBox.Size = new System.Drawing.Size(514, 23);
+            this.SelectedOutputFolderPathTextBox.TabIndex = 8;
+            this.SelectedOutputFolderPathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SelectedOutputDirectoryPathTextBox_DragDrop);
+            this.SelectedOutputFolderPathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.SelectedOutputDirectoryPathTextBox_DragEnter);
             // 
             // label3
             // 
@@ -118,7 +118,7 @@ namespace LoopWaveBuilder.Forms
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(176, 15);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Step 2: 出力先フォルダーを指定する";
+            this.label3.Text = "Step 2: 出力先フォルダーを選択する";
             // 
             // button2
             // 
@@ -152,43 +152,50 @@ namespace LoopWaveBuilder.Forms
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
-            // ExtractionEntriesListView
+            // ExtractionsListView
             // 
-            this.ExtractionEntriesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.ExtractionsListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExtractionEntriesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ExtractionsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.InputFileNameColumnHeader,
-            this.ExtractorNameColumnHeader});
-            this.ExtractionEntriesListView.HideSelection = false;
-            this.ExtractionEntriesListView.Location = new System.Drawing.Point(12, 62);
-            this.ExtractionEntriesListView.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
-            this.ExtractionEntriesListView.Name = "ExtractionEntriesListView";
-            this.ExtractionEntriesListView.Size = new System.Drawing.Size(600, 191);
-            this.ExtractionEntriesListView.TabIndex = 13;
-            this.ExtractionEntriesListView.UseCompatibleStateImageBehavior = false;
-            this.ExtractionEntriesListView.View = System.Windows.Forms.View.Details;
+            this.ExtractorNameColumnHeader,
+            this.InputFolderPathColumnHeader});
+            this.ExtractionsListView.FullRowSelect = true;
+            this.ExtractionsListView.HideSelection = false;
+            this.ExtractionsListView.Location = new System.Drawing.Point(12, 62);
+            this.ExtractionsListView.Margin = new System.Windows.Forms.Padding(3, 3, 3, 9);
+            this.ExtractionsListView.Name = "ExtractionsListView";
+            this.ExtractionsListView.Size = new System.Drawing.Size(600, 191);
+            this.ExtractionsListView.TabIndex = 13;
+            this.ExtractionsListView.UseCompatibleStateImageBehavior = false;
+            this.ExtractionsListView.View = System.Windows.Forms.View.Details;
             // 
             // InputFileNameColumnHeader
             // 
-            this.InputFileNameColumnHeader.Text = "抽出対象の WAV ファイル";
-            this.InputFileNameColumnHeader.Width = 400;
+            this.InputFileNameColumnHeader.Text = "入力ファイル名";
+            this.InputFileNameColumnHeader.Width = 120;
             // 
             // ExtractorNameColumnHeader
             // 
             this.ExtractorNameColumnHeader.Text = "BGM 抽出パターン";
-            this.ExtractorNameColumnHeader.Width = 160;
+            this.ExtractorNameColumnHeader.Width = 120;
+            // 
+            // InputFolderPathColumnHeader
+            // 
+            this.InputFolderPathColumnHeader.Text = "入力ファイルの場所";
+            this.InputFolderPathColumnHeader.Width = 120;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 361);
-            this.Controls.Add(this.ExtractionEntriesListView);
+            this.Controls.Add(this.ExtractionsListView);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.ExecuteButton);
-            this.Controls.Add(this.BrowseOutputDirectoryButton);
-            this.Controls.Add(this.SelectedOutputDirectoryPathTextBox);
+            this.Controls.Add(this.BrowseOutputFolderButton);
+            this.Controls.Add(this.SelectedOutputFolderPathTextBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.OpenSettingsFileButton);
             this.Controls.Add(this.LoadedSettingsFilePathTextBox);
@@ -208,17 +215,17 @@ namespace LoopWaveBuilder.Forms
         private System.Windows.Forms.TextBox LoadedSettingsFilePathTextBox;
         private System.Windows.Forms.Button OpenSettingsFileButton;
         private System.Windows.Forms.OpenFileDialog SettingsOpenFileDialog;
-        private System.Windows.Forms.FolderBrowserDialog InputFolderBrowserDialog;
-        private System.Windows.Forms.Button BrowseOutputDirectoryButton;
-        private System.Windows.Forms.TextBox SelectedOutputDirectoryPathTextBox;
+        private System.Windows.Forms.Button BrowseOutputFolderButton;
+        private System.Windows.Forms.TextBox SelectedOutputFolderPathTextBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.FolderBrowserDialog OutputFolderBrowserDialog;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button ExecuteButton;
         private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.ListView ExtractionEntriesListView;
+        private System.Windows.Forms.ListView ExtractionsListView;
         private System.Windows.Forms.ColumnHeader InputFileNameColumnHeader;
         private System.Windows.Forms.ColumnHeader ExtractorNameColumnHeader;
+        private System.Windows.Forms.ColumnHeader InputFolderPathColumnHeader;
     }
 }
 

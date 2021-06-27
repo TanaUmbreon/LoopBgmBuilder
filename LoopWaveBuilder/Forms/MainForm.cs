@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LoopWaveBuilder.FormModels;
+using LoopWaveBuilder.Models;
+using LoopWaveBuilder.Settings;
 
 namespace LoopWaveBuilder.Forms
 {
@@ -23,51 +25,6 @@ namespace LoopWaveBuilder.Forms
             model = new MainFormModel();
             model.StateChanged += Model_StateChanged;
             model.Clear();
-        }
-
-        private void Model_StateChanged(object? sender, EventArgs e)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => { Model_StateChanged(sender, e); }));
-                return;
-            }
-
-            LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFilePath;
-            SelectedOutputDirectoryPathTextBox.Text = model.SelectedOutputDirecotryPath;
-
-            switch (model.State)
-            {
-                case MainFormModelState.Initialized:
-                    OpenSettingsFileButton.Enabled = true;
-                    ExtractionEntriesListView.Items.Clear();
-
-                    BrowseOutputDirectoryButton.Enabled = true;
-
-                    ExecuteButton.Enabled = true;
-                    ClearButton.Enabled = true;
-
-                    Text = AssemblyInfo.Title;
-                    break;
-
-                case MainFormModelState.LoadedSettings:
-                    //ExtractionEntriesListView.Items.Add();
-                    break;
-
-                case MainFormModelState.Executing:
-                    OpenSettingsFileButton.Enabled = false;
-                    BrowseOutputDirectoryButton.Enabled = false;
-                    ExecuteButton.Enabled = false;
-                    ClearButton.Enabled = false;
-                    break;
-
-                case MainFormModelState.Executed:
-                    OpenSettingsFileButton.Enabled = true;
-                    BrowseOutputDirectoryButton.Enabled = true;
-                    ExecuteButton.Enabled = true;
-                    ClearButton.Enabled = true;
-                    break;
-            }
         }
 
         #region 汎用
@@ -109,22 +66,74 @@ namespace LoopWaveBuilder.Forms
 
         #endregion
 
-        #region 設定ファイルの読み込み
+        #region 状態遷移
 
-        private void OpenSettingsFileButton_Click(object sender, EventArgs e)
+        private void Model_StateChanged(object? sender, EventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { Model_StateChanged(sender, e); }));
+                return;
+            }
+
             try
             {
-                var result = SettingsOpenFileDialog.ShowDialog(this);
-                if (result != DialogResult.OK) { return; }
+                SuspendLayout();
 
-                model.LoadSettingsFile(SettingsOpenFileDialog.FileName);
+                LoadedSettingsFilePathTextBox.Text = model.LoadedSettingsFullName;
+                SelectedOutputFolderPathTextBox.Text = model.SelectedOutputFolderPath;
+
+                ExtractionsListView.Items.Clear();
+                if (model.Extractors.Any())
+                {
+                    var items = new List<ListViewItem>(model.Extractors.Count());
+                    foreach (IWaveBgmExtractor extractor in model.Extractors)
+                    {
+                        var item = new ListViewItem(extractor.InputFileName);
+                        item.SubItems.Add(extractor.ExtractorName);
+                        item.SubItems.Add(extractor.InputFolderPath);
+
+                        items.Add(item);
+                    }
+                    ExtractionsListView.Items.AddRange(items.ToArray());
+                }
+                ExtractionsListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                switch (model.State)
+                {
+                    case MainFormModelState.Initialized:
+                        OpenSettingsFileButton.Enabled = true;
+                        BrowseOutputFolderButton.Enabled = true;
+                        ExecuteButton.Enabled = true;
+                        ClearButton.Enabled = true;
+
+                        Text = AssemblyInfo.Title;
+                        break;
+
+                    case MainFormModelState.Executing:
+                        OpenSettingsFileButton.Enabled = false;
+                        BrowseOutputFolderButton.Enabled = false;
+                        ExecuteButton.Enabled = false;
+                        ClearButton.Enabled = false;
+                        break;
+
+                    case MainFormModelState.Executed:
+                        OpenSettingsFileButton.Enabled = true;
+                        BrowseOutputFolderButton.Enabled = true;
+                        ExecuteButton.Enabled = true;
+                        ClearButton.Enabled = true;
+                        break;
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
+                ResumeLayout(false);
             }
         }
+
+        #endregion
+
+        #region ループ加工設定ファイルの読み込み
 
         private void LoadedSettingsFilePathTextBox_DragEnter(object sender, DragEventArgs e)
         {
@@ -139,7 +148,7 @@ namespace LoopWaveBuilder.Forms
             }
             catch (Exception ex)
             {
-                ShowErrorDialog(Text, "設定ファイルをドラッグ アンド ドロップできません", ex);
+                ShowErrorDialog(Text, "ループ加工設定ファイルを読み込めません", ex);
             }
         }
 
@@ -154,28 +163,30 @@ namespace LoopWaveBuilder.Forms
             }
             catch (Exception ex)
             {
-                ShowErrorDialog(Text, "設定ファイルを読み込めません", ex);
+                ShowErrorDialog(Text, "ループ加工設定ファイルを読み込めません", ex);
+            }
+        }
+
+        private void OpenSettingsFileButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SettingsOpenFileDialog.InitialDirectory = model.LoadedSettingsFolderPath;
+                SettingsOpenFileDialog.FileName = model.LoadedSettingsFileName;
+                var result = SettingsOpenFileDialog.ShowDialog(this);
+                if (result != DialogResult.OK) { return; }
+
+                model.LoadSettingsFile(SettingsOpenFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "ループ加工設定ファイルを読み込めません", ex);
             }
         }
 
         #endregion
 
         #region 出力先フォルダーの選択
-
-        private void BrowseOutputDirectoryButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var result = OutputFolderBrowserDialog.ShowDialog(this);
-                if (result != DialogResult.OK) { return; }
-
-                model.SelectOutputDirectory(OutputFolderBrowserDialog.SelectedPath);
-            }
-            catch (Exception ex)
-            {
-                ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
-            }
-        }
 
         private void SelectedOutputDirectoryPathTextBox_DragEnter(object sender, DragEventArgs e)
         {
@@ -190,7 +201,7 @@ namespace LoopWaveBuilder.Forms
             }
             catch (Exception ex)
             {
-                ShowErrorDialog(Text, "出力先フォルダーをドラッグ アンド ドロップできません", ex);
+                ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
             }
         }
 
@@ -201,7 +212,22 @@ namespace LoopWaveBuilder.Forms
                 TryGetPathIfSingleItemDropped(e.Data, out string? droppedItemPath);
                 if (droppedItemPath == null) { return; }
 
-                model.SelectOutputDirectory(droppedItemPath);
+                model.SelectOutputFolder(droppedItemPath);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog(Text, "出力先フォルダーを選択できません", ex);
+            }
+        }
+
+        private void BrowseOutputFolderButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var result = OutputFolderBrowserDialog.ShowDialog(this);
+                if (result != DialogResult.OK) { return; }
+
+                model.SelectOutputFolder(OutputFolderBrowserDialog.SelectedPath);
             }
             catch (Exception ex)
             {
