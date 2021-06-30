@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using LoopWaveBuilder.Infrastracures;
 using LoopWaveBuilder.Models;
 using LoopWaveBuilder.Models.Extractors;
-using LoopWaveBuilder.Settings;
-using NAudio.Wave;
 
 namespace LoopWaveBuilder.FormModels
 {
@@ -167,20 +165,8 @@ namespace LoopWaveBuilder.FormModels
                         WaveBgm bgm = extrator.Extract();
 
                         string outFileName = Path.Combine(SelectedOutputFolderPath, Path.GetFileName(extrator.InputFileName));
-                        using var writer = new WaveFileWriter(outFileName, bgm.WaveFormat);
- 
-                        if (bgm.BeginingPartSamples.Length > 0)
-                        {
-                            writer.WriteSamples(bgm.BeginingPartSamples, 0, bgm.BeginingPartSamples.Length);
-                        }
-
-                        if (bgm.LoopPartSamples.Length > 0 && repository.Settings.DefaultOutputFormat.LoopCount > 0)
-                        {
-                            for (int loopCount = 0; loopCount < repository.Settings.DefaultOutputFormat.LoopCount; loopCount++)
-                            {
-                                writer.WriteSamples(bgm.LoopPartSamples, 0, bgm.LoopPartSamples.Length);
-                            }
-                        }
+                        using var writer = new WaveBgmWriter(outFileName, bgm, repository.Settings.DefaultOutputFormat);
+                        writer.Write();
                     }
                     finally
                     {

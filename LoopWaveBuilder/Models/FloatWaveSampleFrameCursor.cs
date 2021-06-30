@@ -102,5 +102,22 @@ namespace LoopWaveBuilder.Models
 
             return targetSamples[samplePosition..(samplePosition + channels)].All(f => f == 0f);
         }
+
+        /// <summary>
+        /// カーソルが指し示すフレームのサンプルに対して指定した倍率で増幅します。
+        /// </summary>
+        /// <param name="rate">増幅率。</param>
+        public void Amplify(float rate)
+        {
+            if (rate < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(rate), "増幅率がマイナスです。");
+            }
+            
+            for (int offset = 0; offset < channels; offset++)
+            {
+                targetSamples[samplePosition + offset] *= rate;
+            }
+        }
     }
 }
