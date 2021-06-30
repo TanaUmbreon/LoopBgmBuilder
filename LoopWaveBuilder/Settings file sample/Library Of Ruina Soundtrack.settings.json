@@ -3,7 +3,7 @@
     "BeginingSilenceMiliseconds": 300,
     "LoopCount": 2,
     "FadeoutDelayMiliseconds": 2000,
-    "FadeoutMiliseconds": 10000,
+    "FadeoutMiliseconds": 12000,
     "EndingSilenceMiliseconds": 1000
   },
   "Extractions": [
@@ -11,7 +11,7 @@
       "InputFileName": "C:\\Program Files (x86)\\Steam\\steamapps\\music\\Library Of Ruina Soundtrack\\wav\\1_1_Theme.wav",
       "ExtractorName": "PartialLoop",
       "LoopBeginSamples": 1628132,
-      "LoopEndSamples": 5373415,
+      "LoopEndSamples": 5373416,
       "TrimsBeginingSilence": true
     },
     {
