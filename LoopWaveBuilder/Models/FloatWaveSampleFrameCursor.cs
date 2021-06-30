@@ -51,7 +51,7 @@ namespace LoopWaveBuilder.Models
         /// <returns>移動先のフレーム位置に音声データがある場合は true、末尾に到達して移動先のフレーム位置に音声データがない場合は false。</returns>
         public bool MoveNext()
         {
-            samplePosition += channels;
+            samplePosition = IsBegin() ? 0 : samplePosition + channels;
             if (IsEnd())
             {
                 samplePosition = endSamplePosition;
