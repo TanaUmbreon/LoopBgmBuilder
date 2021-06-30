@@ -13,7 +13,7 @@ namespace LoopWaveBuilder.Infrastracures
         /// <summary>
         /// BGM のループ加工設定を取得します。
         /// </summary>
-        public WaveBgmProcessingSettings Settings { get; }
+        public LoopProcessingSettings Settings { get; }
 
         /// <summary>
         /// このループ加工設定ファイルの完全パスを取得します。
@@ -48,7 +48,7 @@ namespace LoopWaveBuilder.Infrastracures
                 throw new FileNotFoundException($"ループ加工設定ファイル '{file.FullName}' が見つかりません。");
             }
 
-            WaveBgmProcessingSettings settings = JsonConvert.DeserializeObject<WaveBgmProcessingSettings>(File.ReadAllText(file.FullName))
+            LoopProcessingSettings settings = JsonConvert.DeserializeObject<LoopProcessingSettings>(File.ReadAllText(file.FullName))
                 ?? throw new InvalidCastException($"ループ加工設定ファイルの形式ではありません。");
             settings.ThrowIfValidationFailed();
 

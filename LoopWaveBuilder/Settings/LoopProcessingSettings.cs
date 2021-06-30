@@ -5,7 +5,7 @@ namespace LoopWaveBuilder.Settings
     /// <summary>
     /// WAVE 形式の BGM をループ加工する為の設定を格納します。
     /// </summary>
-    public record WaveBgmProcessingSettings(
+    public record LoopProcessingSettings(
         DefaultOutputFormatSettings DefaultOutputFormat,
         IEnumerable<ExtractionSettings> Extractions)
     {
