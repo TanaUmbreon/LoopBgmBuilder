@@ -116,9 +116,9 @@ namespace LoopBgmBuilder.Forms
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 262);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(176, 15);
+            this.label3.Size = new System.Drawing.Size(378, 15);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Step 2: 出力先フォルダーを選択する";
+            this.label3.Text = "Step 2: 出力先フォルダーを選択する (※入力ファイルと同じ名前で上書き出力)";
             // 
             // button2
             // 
