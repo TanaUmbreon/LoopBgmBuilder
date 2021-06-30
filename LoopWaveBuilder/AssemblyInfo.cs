@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace LoopWaveBuilder
+namespace LoopBgmBuilder
 {
     /// <summary>
     /// このアプリケーションに関するアセンブリ情報を参照するユーティリティ クラスです。

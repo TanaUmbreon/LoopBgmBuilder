@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace LoopWaveBuilder.Models
+namespace LoopBgmBuilder.Models
 {
     /// <summary>
     /// <see cref="FloatWaveSampleBuffer"/> の音声データ サンプルをフレーム単位で参照、参照位置の移動および操作するカーソルです。

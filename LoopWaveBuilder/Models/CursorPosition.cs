@@ -1,4 +1,4 @@
-﻿namespace LoopWaveBuilder.Models
+﻿namespace LoopBgmBuilder.Models
 {
     /// <summary>
     /// カーソルの位置を表します。

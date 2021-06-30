@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using LoopWaveBuilder.Infrastracures;
-using LoopWaveBuilder.Models;
-using LoopWaveBuilder.Models.Extractors;
+using LoopBgmBuilder.Infrastracures;
+using LoopBgmBuilder.Models;
+using LoopBgmBuilder.Models.Extractors;
 
-namespace LoopWaveBuilder.FormModels
+namespace LoopBgmBuilder.FormModels
 {
     /// <summary>
     /// モデル化されたメイン画面です。

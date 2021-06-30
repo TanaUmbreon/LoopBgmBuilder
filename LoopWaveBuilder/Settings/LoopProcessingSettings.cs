@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LoopWaveBuilder.Settings
+namespace LoopBgmBuilder.Settings
 {
     /// <summary>
     /// WAVE 形式の BGM をループ加工する為の設定を格納します。

@@ -1,4 +1,4 @@
-﻿namespace LoopWaveBuilder.Models
+﻿namespace LoopBgmBuilder.Models
 {
     /// <summary>
     ///  WAVE 形式の BGM データの抽出をサポートします。

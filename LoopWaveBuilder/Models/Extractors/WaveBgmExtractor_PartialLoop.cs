@@ -1,7 +1,7 @@
 ﻿using System;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.Settings;
 
-namespace LoopWaveBuilder.Models.Extractors
+namespace LoopBgmBuilder.Models.Extractors
 {
     /// <summary>
     /// 特定の位置まで再生すると特定の位置からループ再生する構成の WAVE 形式の BGM データを抽出します。

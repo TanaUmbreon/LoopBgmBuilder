@@ -1,4 +1,4 @@
-﻿namespace LoopWaveBuilder.FormModels
+﻿namespace LoopBgmBuilder.FormModels
 {
     /// <summary>
     /// <see cref="MainFormModel"/> の状態を表します。

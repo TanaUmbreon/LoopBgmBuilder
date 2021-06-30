@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.Settings;
 using Newtonsoft.Json;
 
-namespace LoopWaveBuilder.Infrastracures
+namespace LoopBgmBuilder.Infrastracures
 {
     /// <summary>
     /// JSON 形式で記述された BGM のループ加工設定ファイルへの物理的な操作を実装します。

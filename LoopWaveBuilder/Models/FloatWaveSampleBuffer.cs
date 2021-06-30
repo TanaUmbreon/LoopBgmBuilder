@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 
-namespace LoopWaveBuilder.Models
+namespace LoopBgmBuilder.Models
 {
     /// <summary>
     /// 32 ビット浮動小数点数方式で WAVE 形式の音声データ サンプルを扱うバッファーです。

@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using LoopWaveBuilder.FormModels;
-using LoopWaveBuilder.Models;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.FormModels;
+using LoopBgmBuilder.Models;
+using LoopBgmBuilder.Settings;
 
-namespace LoopWaveBuilder.Forms
+namespace LoopBgmBuilder.Forms
 {
     public partial class MainForm : Form
     {

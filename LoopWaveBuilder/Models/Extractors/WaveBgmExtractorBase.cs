@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.Settings;
 
-namespace LoopWaveBuilder.Models.Extractors
+namespace LoopBgmBuilder.Models.Extractors
 {
     public abstract class WaveBgmExtractorBase : IWaveBgmExtractor
     {

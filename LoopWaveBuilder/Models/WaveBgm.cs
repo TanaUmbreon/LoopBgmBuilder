@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 
-namespace LoopWaveBuilder.Models
+namespace LoopBgmBuilder.Models
 {
     /// <summary>
     /// ループ再生可能な構造を持つ WAVE 形式の BGM データです。

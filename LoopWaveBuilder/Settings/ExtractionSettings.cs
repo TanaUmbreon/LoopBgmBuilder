@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LoopWaveBuilder.Settings
+namespace LoopBgmBuilder.Settings
 {
     /// <summary>
     /// BGM データを抽出する為の設定を格納します。

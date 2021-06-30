@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.Settings;
 using NAudio.Wave;
 
-namespace LoopWaveBuilder.Models
+namespace LoopBgmBuilder.Models
 {
     /// <summary>
     /// WAVE 形式の BGM データを書き出します。

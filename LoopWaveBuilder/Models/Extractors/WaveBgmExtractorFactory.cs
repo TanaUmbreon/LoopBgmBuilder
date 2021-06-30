@@ -1,7 +1,7 @@
 ﻿using System;
-using LoopWaveBuilder.Settings;
+using LoopBgmBuilder.Settings;
 
-namespace LoopWaveBuilder.Models.Extractors
+namespace LoopBgmBuilder.Models.Extractors
 {
     /// <summary>
     /// <see cref="IWaveBgmExtractor"/> を実装するオブジェクトを動的に生成します。
@@ -9,7 +9,7 @@ namespace LoopWaveBuilder.Models.Extractors
     public static class WaveBgmExtractorFactory
     {
         /// <summary></summary>
-        private const string ExtractorPrefixName = "LoopWaveBuilder.Models.Extractors.WaveBgmExtractor_";
+        private const string ExtractorPrefixName = "LoopBgmBuilder.Models.Extractors.WaveBgmExtractor_";
 
         /// <summary>
         /// 指定した名前を持つ BGM データ抽出オブジェクトのインスタンスを生成します。

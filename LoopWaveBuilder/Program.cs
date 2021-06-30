@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
-using LoopWaveBuilder.Forms;
+using LoopBgmBuilder.Forms;
 
-namespace LoopWaveBuilder
+namespace LoopBgmBuilder
 {
     static class Program
     {

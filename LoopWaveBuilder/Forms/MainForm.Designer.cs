@@ -1,5 +1,5 @@
 ﻿
-namespace LoopWaveBuilder.Forms
+namespace LoopBgmBuilder.Forms
 {
     partial class MainForm
     {
