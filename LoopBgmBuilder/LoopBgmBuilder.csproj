@@ -22,10 +22,11 @@
 
   <ItemGroup>
     <None Remove="Library Of Ruina Soundtrack.settings.json" />
-    <None Include="..\LICENSE">
+    <Content Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -42,5 +43,9 @@
     <PackageReference Include="NAudio.Core" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="del &quot;$(TargetDir)$(TargetName).deps.json&quot;&#xD;&#xA;del &quot;$(TargetDir)$(TargetName).runtimeconfig.dev.json&quot;&#xD;&#xA;rmdir /s /q &quot;$(TargetDir)ref\&quot;&#xD;&#xA;&#xD;&#xA;:: Releaseビルド時は、配布用フォルダを作成する&#xD;&#xA;if &quot;$(ConfigurationName)&quot; neq &quot;Release&quot; goto EXIT&#xD;&#xA;&#xD;&#xA;set TargetDir=$(TargetDir)&#xD;&#xA;set ExportDir=$(SolutionDir)$(SolutionName)-bin-x.x.x\&#xD;&#xA;if not exist &quot;%25ExportDir%25&quot; mkdir &quot;%25ExportDir%25&quot;&#xD;&#xA;echo D | xcopy  /s /e /y &quot;%25TargetDir:~0,-1%25&quot; &quot;%25ExportDir%25&quot;&#xD;&#xA;&#xD;&#xA;:EXIT" />
+  </Target>
 
 </Project>
