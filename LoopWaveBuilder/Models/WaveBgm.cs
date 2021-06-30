@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 
 namespace LoopWaveBuilder.Models
 {
@@ -14,26 +13,26 @@ namespace LoopWaveBuilder.Models
         public WaveFormat WaveFormat { get; }
 
         /// <summary>
-        /// 開始部の波形データを取得します。
+        /// 開始部の音声データ サンプルの配列を取得します。
         /// </summary>
-        public WaveSampleFrame[] BeginingPart { get; }
+        public float[] BeginingPartSamples { get; }
 
         /// <summary>
-        /// ループ部の波形データを取得します。
+        /// ループ部の音声データ サンプルの配列を取得します。
         /// </summary>
-        public WaveSampleFrame[] LoopPart { get; }
+        public float[] LoopPartSamples { get; }
 
         /// <summary>
         /// <see cref="WaveBgm"/> の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="waveFormat">WAVE 形式のフォーマット情報。</param>
-        /// <param name="beginingPart">開始部の波形データ。</param>
-        /// <param name="loopPart">ループ部の波形データ。</param>
-        public WaveBgm(WaveFormat waveFormat, WaveSampleFrame[] beginingPart, WaveSampleFrame[] loopPart)
+        /// <param name="beginingPartSamples">開始部の音声データ サンプルの配列。</param>
+        /// <param name="loopPartSamples">ループ部の音声データ サンプルの配列。</param>
+        public WaveBgm(WaveFormat waveFormat, float[] beginingPartSamples, float[] loopPartSamples)
         {
             WaveFormat = waveFormat;
-            BeginingPart = beginingPart;
-            LoopPart = loopPart;
+            BeginingPartSamples = beginingPartSamples;
+            LoopPartSamples = loopPartSamples;
         }
     }
 }

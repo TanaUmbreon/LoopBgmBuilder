@@ -1,6 +1,5 @@
 ﻿using System;
 using LoopWaveBuilder.Settings;
-using NAudio.Wave;
 
 namespace LoopWaveBuilder.Models.Extractors
 {
@@ -32,59 +31,47 @@ namespace LoopWaveBuilder.Models.Extractors
 
         public override WaveBgm Extract()
         {
-            WaveFormat format;
-            WaveSampleFrame[] buffer;
+            var buffer = new FloatWaveSampleBuffer(InputFullName);
 
-            using (var reader = new WaveFileReaderEx(InputFullName))
-            {
-                format = reader.WaveFormat;
-                buffer = reader.ReadToEnd();
-            }
+            int soundBeginSamples = TrimsBeginingSilence ? GetSoundBeginSamples(buffer) : 0;
+            int soundEndSamples = TrimsEndingSilence ? GetSoundEndSamples(buffer) : buffer.SampleCount;
 
-            int soundBeginFrames = TrimsBeginingSilence ? GetSoundBeginFrames(buffer) : 0;
-            int soundEndFrames = TrimsEndingSilence ? GetSoundEndFrames(buffer) : buffer.Length - 1;
-
-            return new WaveBgm(format,
-                Array.Empty<WaveSampleFrame>(),
-                buffer[soundBeginFrames..(soundEndFrames + 1)]);
+            return new WaveBgm(buffer.WaveFormat,
+            Array.Empty<float>(),
+            buffer.Samples[soundBeginSamples..soundEndSamples]);
         }
 
         /// <summary>
-        /// 指定した音声データから、最初に音が始まるフレーム (音声データの先頭の無音が終了した次のフレーム) 位置を取得します。
+        /// 指定したバッファーから、最初に音が始まる包括的なサンプル位置を取得します。
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        private static int GetSoundBeginFrames(WaveSampleFrame[] buffer)
+        private static int GetSoundBeginSamples(FloatWaveSampleBuffer buffer)
         {
-            int soundBeginFrames = 0;
-            while (soundBeginFrames < buffer.Length && buffer[soundBeginFrames].IsSilence())
-            {
-                soundBeginFrames++;
-            }
-            if (soundBeginFrames >= buffer.Length)
+            FloatWaveSampleFrameCursor cursor = buffer.CreateFrameCursor(CursorPosition.Begin);
+            while (cursor.MoveNext() && cursor.IsSilence()) { }
+            if (cursor.IsEnd())
             {
                 throw new ApplicationException("全て無音の BGM データです。");
             }
-            return soundBeginFrames;
+            return cursor.SamplePosition;
         }
 
         /// <summary>
-        /// 指定した音声データから、最後に音が終わるフレーム (音声データの末尾の無音が始まる前のフレーム) 位置を取得します。
+        /// 指定したバッファーから、最後に音が終わる排他的なサンプル位置を取得します。
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        private static int GetSoundEndFrames(WaveSampleFrame[] buffer)
+        private static int GetSoundEndSamples(FloatWaveSampleBuffer buffer)
         {
-            int soundEndFrames = buffer.Length - 1;
-            while (soundEndFrames >= 0 && buffer[soundEndFrames].IsSilence())
-            {
-                soundEndFrames--;
-            }
-            if (soundEndFrames < 0)
+            FloatWaveSampleFrameCursor cursor = buffer.CreateFrameCursor(CursorPosition.End);
+            while (cursor.MovePrevious() && cursor.IsSilence()) { }
+            if (cursor.IsBegin())
             {
                 throw new ApplicationException("全て無音の BGM データです。");
             }
-            return soundEndFrames;
+            cursor.MoveNext();
+            return cursor.SamplePosition;
         }
     }
 }

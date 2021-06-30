@@ -160,7 +160,6 @@ namespace LoopWaveBuilder.FormModels
             {
                 OnStateChanged(MainFormModelState.Executing);
 
-                var exceptions = new List<Exception>();
                 foreach (IWaveBgmExtractor extrator in extrators)
                 {
                     try
@@ -170,42 +169,23 @@ namespace LoopWaveBuilder.FormModels
                         string outFileName = Path.Combine(SelectedOutputFolderPath, Path.GetFileName(extrator.InputFileName));
                         using var writer = new WaveFileWriter(outFileName, bgm.WaveFormat);
  
-                        if (bgm.BeginingPart.Length > 0)
+                        if (bgm.BeginingPartSamples.Length > 0)
                         {
-                            var begining = new List<float>(bgm.BeginingPart.Length * bgm.WaveFormat.Channels);
-                            foreach (WaveSampleFrame frame in bgm.BeginingPart)
-                            {
-                                begining.AddRange(frame.samplesInFrame);
-                            }
-                            writer.WriteSamples(begining.ToArray(), 0, begining.Count);
+                            writer.WriteSamples(bgm.BeginingPartSamples, 0, bgm.BeginingPartSamples.Length);
                         }
 
-                        if (bgm.LoopPart.Length > 0 && repository.Settings.DefaultOutputFormat.LoopCount > 0)
+                        if (bgm.LoopPartSamples.Length > 0 && repository.Settings.DefaultOutputFormat.LoopCount > 0)
                         {
-                            var loop = new List<float>(bgm.LoopPart.Length * bgm.WaveFormat.Channels);
-                            foreach (WaveSampleFrame frame in bgm.LoopPart)
-                            {
-                                loop.AddRange(frame.samplesInFrame);
-                            }
                             for (int loopCount = 0; loopCount < repository.Settings.DefaultOutputFormat.LoopCount; loopCount++)
                             {
-                                writer.WriteSamples(loop.ToArray(), 0, loop.Count);
+                                writer.WriteSamples(bgm.LoopPartSamples, 0, bgm.LoopPartSamples.Length);
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
                     }
                     finally
                     {
                         GC.Collect();
                     }
-                }
-                if (exceptions.Any())
-                {
-                    var ex = exceptions[0];
-                    throw ex;
                 }
             }
             finally
