@@ -7,7 +7,7 @@
     <Authors>Tana</Authors>
     <Product>Loop BGM Builder</Product>
     <Copyright>Copyright © 2021 Tana</Copyright>
-    <AssemblyTitle>Loop Wave Builder</AssemblyTitle>
+    <AssemblyTitle>Loop BGM Builder</AssemblyTitle>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>GitHub</RepositoryType>
     <RepositoryUrl>https://github.com/TanaUmbreon/LoopBgmBuilder</RepositoryUrl>
@@ -36,7 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\README.md" Link="README.md" />
+    <Content Include="..\README.md" Link="README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
