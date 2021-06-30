@@ -158,6 +158,7 @@ namespace LoopBgmBuilder.FormModels
             {
                 OnStateChanged(MainFormModelState.Executing);
 
+                Directory.CreateDirectory(SelectedOutputFolderPath);
                 foreach (IWaveBgmExtractor extrator in extrators)
                 {
                     try
